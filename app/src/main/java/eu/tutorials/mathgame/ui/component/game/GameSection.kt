@@ -10,7 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.model.Operand
 import eu.tutorials.mathgame.data.model.Option
@@ -25,7 +28,8 @@ fun GameSection(
     borderColor: Color,
     selectedOption: Int?,
     enabled: Boolean,
-    onOptionClick: (Int) -> Unit
+    onOptionClick: (Int) -> Unit,
+    onOptionPositioned: ((Rect) -> Unit)? = null
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -39,6 +43,6 @@ fun GameSection(
             color = borderColor
         )
         Spacer(modifier = Modifier.height(32.dp))
-        Options(options, color, borderColor, selectedOption, enabled, onOptionClick)
+        Options(options, color, borderColor, selectedOption, enabled, onOptionClick, onOptionPositioned)
     }
 }

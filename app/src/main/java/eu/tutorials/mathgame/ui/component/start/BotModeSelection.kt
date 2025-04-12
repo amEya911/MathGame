@@ -54,7 +54,6 @@ import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.model.BotLevel
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BotModeSelection(
     onBotLevelSelected: (BotLevel) -> Unit,

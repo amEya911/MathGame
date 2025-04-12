@@ -1,8 +1,5 @@
 package eu.tutorials.mathgame.ui.component.game
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,21 +13,19 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.sp
-import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.model.Option
-import eu.tutorials.mathgame.util.Sound
-import kotlinx.coroutines.delay
 
 @Composable
 fun Options(
@@ -39,34 +34,15 @@ fun Options(
     borderColor: Color,
     selectedOption: Int?,
     enabled: Boolean,
-    onOptionClick: (Int) -> Unit
+    onOptionClick: (Int) -> Unit,
+    onOptionPositioned: ((Rect) -> Unit)? = null
 ) {
-    val context = LocalContext.current
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         options.forEach { option ->
-            val isSelected = selectedOption == option.option
             val isCorrect = option.answer
-
-            var circleRadius by remember { mutableStateOf(0.dp) }
-
-            val animatedRadius by animateDpAsState(
-                targetValue = circleRadius,
-                animationSpec = tween(durationMillis = 500),
-                label = "circleAnimation"
-            )
-
-            LaunchedEffect(selectedOption) {
-                if (isSelected) {
-                    Sound.playSound(context, if (isCorrect) R.raw.win else R.raw.lose)
-                    circleRadius = 350.dp
-                    delay(2500)
-                    circleRadius = 0.dp
-                }
-            }
 
             val backgroundColor = when {
                 selectedOption == null -> color
@@ -76,20 +52,15 @@ fun Options(
             }
 
             Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Canvas(
-                    modifier = Modifier.size(100.dp)
-                ) {
-                    if (isSelected) {
-                        drawCircle(
-                            color = backgroundColor,
-                            radius = animatedRadius.toPx(),
-                            alpha = 0.5f
-                        )
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
+                    val bounds = layoutCoordinates.boundsInRoot()
+                    if (option.option == selectedOption) {
+                        onOptionPositioned?.invoke(bounds)
                     }
-                }
 
+                }
+            ) {
                 Button(
                     onClick = {
                         if (selectedOption == null) onOptionClick(option.option)

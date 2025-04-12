@@ -2,7 +2,6 @@ package eu.tutorials.mathgame.data.state
 
 import eu.tutorials.mathgame.data.model.Operand
 import eu.tutorials.mathgame.data.model.Option
-import eu.tutorials.mathgame.ui.viewmodel.ButtonSituation
 
 data class GameState(
     val operands: List<Operand>? = emptyList(),
@@ -13,6 +12,5 @@ data class GameState(
     val selectedBlueOption: Int? = null,
     val selectedRedOption: Int? = null,
     val isExitClicked: Boolean = false,
-    val countdown: Int? = null,
-    val buttonSituation: ButtonSituation? = null
+    val countdown: Int? = null
 )

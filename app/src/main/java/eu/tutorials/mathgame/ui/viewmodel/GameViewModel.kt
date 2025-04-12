@@ -183,8 +183,3 @@ class GameViewModel @Inject constructor() : ViewModel() {
         return random.nextInt(4) + 1
     }
 }
-
-data class ButtonSituation(
-    val position: Rect,
-    val isCorrect: Boolean
-)
