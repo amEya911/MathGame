@@ -2,22 +2,22 @@ package eu.tutorials.mathgame.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val NormalModeBackGround = Color(0xFFE0D7FF)
+val normalModeBackground = Color(0xFFE0D7FF)
 
-val NormalModeSurface = Color(0xFFF7FEF7)
-val NormalModeButton = Color(0xFFB619AD)
-val NormalModeText = Color(0xFF330033) //0xFFF9D0F6
-val NormalModeTopBackground = Color(0xFF9EA3F7)
+val normalModeSurface = Color(0xFFF7FEF7)
+val normalModeButton = Color(0xFFB619AD)
+val normalModeText = Color(0xFF330033)
+val normalModeTopBackground = Color(0xFF9EA3F7)
 
-val EasyColor = Color(0xFF4CAF50)        // Green
-val MediumColor = Color(0xFFFFEB3B)      // Yellow
-val HardColor = Color(0xFF800080)        // Purple
+val easyColor = Color(0xFF4CAF50)
+val mediumColor = Color(0xFFFFEB3B)
+val hardColor = Color.Red
 
-val PrimaryColor = Color(0xFFFF0000)     // Red
-val PrimaryInverseColor = Color(0xFF0000FF) // Blue
+val primaryColor = Color(0xFFFF0000)
+val primaryInverseColor = Color(0xFF0000FF)
 
-val CorrectAnswerColor = Color(0xFF00C853)  // Different green
-val WrongAnswerColor = Color.DarkGray
+val correctAnswerColor = Color(0xFF00C853)
+val wrongAnswerColor = Color.DarkGray
 
-val BotModeBackground = Color.Gray
-val BotModeBox = Color.DarkGray
+val botModeBackground = Color.Gray
+val botModeBox = Color.DarkGray

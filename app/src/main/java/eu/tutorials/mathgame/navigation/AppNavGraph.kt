@@ -9,11 +9,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
+import eu.tutorials.mathgame.data.model.RemoteColors
 import eu.tutorials.mathgame.ui.screen.Game
 import eu.tutorials.mathgame.ui.screen.Start
 
 @Composable
-fun AppNavGraph(modifier: Modifier = Modifier) {
+fun AppNavGraph(
+    modifier: Modifier = Modifier
+) {
     val navController = rememberNavController()
 
     NavHost(

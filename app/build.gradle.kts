@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
+    alias(libs.plugins.google.gms.google.services)
+
 }
 
 android {
@@ -54,10 +56,14 @@ android {
 dependencies {
 
     implementation (libs.dagger.hilt.android)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.firebase.config)
+    //implementation(libs.firebase.analytics)
     kapt (libs.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(platform(libs.firebase.bom))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

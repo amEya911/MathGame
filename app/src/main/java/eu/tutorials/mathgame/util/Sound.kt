@@ -7,14 +7,25 @@ object Sound {
     private var mediaPlayer: MediaPlayer? = null
 
     fun playSound(context: Context, soundResId: Int) {
-        mediaPlayer?.release()
-        mediaPlayer = MediaPlayer.create(context, soundResId)
-        mediaPlayer?.apply {
-            start()
-            setOnCompletionListener {
+        mediaPlayer?.let {
+            try {
+                it.stop()
                 it.release()
-                mediaPlayer = null
+            } catch (_: Exception) { }
+            mediaPlayer = null
+        }
+
+        try {
+            mediaPlayer = MediaPlayer.create(context, soundResId)
+            mediaPlayer?.apply {
+                setOnCompletionListener {
+                    it.release()
+                    if (mediaPlayer == it) mediaPlayer = null
+                }
+                start()
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

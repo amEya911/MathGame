@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
@@ -26,6 +28,8 @@ import eu.tutorials.mathgame.ui.component.game.GameSideEffects
 import eu.tutorials.mathgame.ui.component.game.PlayerSections
 import eu.tutorials.mathgame.ui.component.game.ScoreIndicator
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
+import eu.tutorials.mathgame.util.AppLifecycle.rememberAppInForeground
+import eu.tutorials.mathgame.util.FirebaseUtils
 import kotlinx.coroutines.delay
 
 @Composable
@@ -35,6 +39,9 @@ fun Game(
     gameMode: GameMode,
     botLevel: BotLevel?
 ) {
+    val isAppInForeground = rememberAppInForeground()
+    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(Firebase.remoteConfig).maxPoints
+
     val context = LocalContext.current
     val gameState = gameViewModel.gameState.collectAsState().value
     val countdown = gameState.countdown
@@ -63,7 +70,9 @@ fun Game(
         },
         onReset = {
             gameViewModel.onEvent(GameEvent.OnReset)
-        }
+        },
+        isAppInForeground = isAppInForeground,
+        maxWinningPoints = maxWinningPoints
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -109,33 +118,35 @@ fun Game(
         }
     }
 
-//    if (gameState.blueScore == 10 || gameState.redScore == 10) {
-//        var showWinnerBox by remember { mutableStateOf(false) }
-//        LaunchedEffect(Unit) {
-//            delay(3000)
-//            showWinnerBox = true
-//            delay(2000)
-//            onExitClicked()
-//        }
-//
-//        if (showWinnerBox) {
-//            val backgroundColor = if (gameState.blueScore == 10)
-//                MaterialTheme.colorScheme.inversePrimary
-//            else
-//                MaterialTheme.colorScheme.primary
-//
-//            Box(modifier = Modifier
-//                .fillMaxSize()
-//                .background(backgroundColor),
-//                contentAlignment = Alignment.Center
-//                ) {
-//                Text(
-//                    text = if (gameState.blueScore == 10) "Blue Wins!" else "Red Wins!",
-//                    fontSize = 32.sp,
-//                    color = Color.White,
-//                    modifier = Modifier.align(Alignment.Center)
-//                )
-//            }
-//        }
-//    }
+    if (maxWinningPoints != null && maxWinningPoints != 0L) {
+        if (gameState.blueScore == maxWinningPoints.toInt() || gameState.redScore == maxWinningPoints.toInt()) {
+            var showWinnerBox by remember { mutableStateOf(false) }
+            LaunchedEffect(Unit) {
+                delay(3000)
+                showWinnerBox = true
+                delay(2000)
+                onExitClicked()
+            }
+
+            if (showWinnerBox) {
+                val backgroundColor = if (gameState.blueScore == maxWinningPoints.toInt())
+                    MaterialTheme.colorScheme.inversePrimary
+                else
+                    MaterialTheme.colorScheme.primary
+
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (gameState.blueScore == maxWinningPoints.toInt()) "Blue Wins!" else "Red Wins!",
+                        fontSize = 32.sp,
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
+        }
+    }
 }

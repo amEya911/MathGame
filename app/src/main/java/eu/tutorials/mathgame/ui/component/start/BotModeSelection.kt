@@ -21,8 +21,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -36,17 +38,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -60,7 +63,7 @@ fun BotModeSelection(
     onBackClicked: () -> Unit
 ) {
     val levels = listOf(BotLevel.EASY, BotLevel.MEDIUM, BotLevel.HARD)
-    var sliderPosition by remember { mutableStateOf(0f) }
+    var sliderPosition by remember { mutableFloatStateOf(0f) }
     var previousLevel by remember { mutableStateOf(BotLevel.EASY) }
 
     val selectedLevel = levels[sliderPosition.roundToInt()]
@@ -88,8 +91,9 @@ fun BotModeSelection(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceVariant)
+            .verticalScroll(rememberScrollState())
     ) {
-        BotImage(painterId, isLevelIncreasing)
+        BotImage(painterId, isLevelIncreasing, color)
 
         BotLevelCard(
             selectedLevel = selectedLevel,
@@ -104,13 +108,13 @@ fun BotModeSelection(
 }
 
 @Composable
-fun BotImage(painterId: Int, isLevelIncreasing: Boolean) {
+fun BotImage(painterId: Int, isLevelIncreasing: Boolean, color: Color) {
     Box(
         modifier = Modifier
             .size(100.dp)
             .offset(y = 20.dp)
             .zIndex(1f)
-            .background(Color.White, shape = CircleShape),
+            .background(color, shape = CircleShape),
         contentAlignment = Alignment.Center
     ) {
         AnimatedContent(
@@ -125,7 +129,7 @@ fun BotImage(painterId: Int, isLevelIncreasing: Boolean) {
             Image(
                 painter = painterResource(id = id),
                 contentDescription = "Bot Level Icon",
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(80.dp),
             )
         }
     }
@@ -236,8 +240,12 @@ fun BotLevelSlider(
 
 @Composable
 fun PlayButton(color: Color, onClick: () -> Unit) {
+    val haptic = LocalHapticFeedback.current
     Button(
-        onClick = onClick,
+        onClick = {
+            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            onClick()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 32.dp, start = 32.dp, end = 32.dp)
@@ -251,13 +259,16 @@ fun PlayButton(color: Color, onClick: () -> Unit) {
 
 @Composable
 fun BackButton(onBackClicked: () -> Unit) {
+    val haptic = LocalHapticFeedback.current
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(bottom = 16.dp)
-            .fillMaxWidth()
-            .clickable { onBackClicked() }
+            .padding(16.dp)
+            .clickable {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                onBackClicked()
+            }
     ) {
         Icon(
             imageVector = Icons.Default.ArrowBack,

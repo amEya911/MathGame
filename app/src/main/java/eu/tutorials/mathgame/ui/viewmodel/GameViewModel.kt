@@ -1,7 +1,5 @@
 package eu.tutorials.mathgame.ui.viewmodel
 
-import android.util.Log
-import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,13 +8,11 @@ import eu.tutorials.mathgame.data.model.Answer
 import eu.tutorials.mathgame.data.model.Operand
 import eu.tutorials.mathgame.data.model.Option
 import eu.tutorials.mathgame.data.state.GameState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.withContext
 import java.util.Random
 import javax.inject.Inject
 
@@ -94,9 +90,7 @@ class GameViewModel @Inject constructor() : ViewModel() {
                 )
 
                 delay(3000)
-                withContext(Dispatchers.Default) {
-                    nextQuestion()
-                }
+                nextQuestion()
 
             } finally {
                 mutex.unlock()
@@ -127,10 +121,13 @@ class GameViewModel @Inject constructor() : ViewModel() {
         val options = mutableListOf<Option>()
         options.add(Option(correctAnswer, true))
 
-        val placementPattern = random.nextInt(3)
-
+        val placementPattern = if (correctAnswer <= 3) 0 else random.nextInt(3)
         val incorrectOptions = mutableListOf<Int>()
-        while (incorrectOptions.size < 2) {
+
+        var attempts = 0
+        val maxAttempts = 20
+
+        while (incorrectOptions.size < 2 && attempts < maxAttempts) {
             val randomOffset = random.nextInt(16) + 2
             val incorrectValue = when (placementPattern) {
                 0 -> correctAnswer + randomOffset
@@ -144,6 +141,21 @@ class GameViewModel @Inject constructor() : ViewModel() {
                 )
             ) {
                 incorrectOptions.add(incorrectValue)
+            }
+
+            attempts++
+        }
+
+        while (incorrectOptions.size < 2) {
+            val offset = when (incorrectOptions.size) {
+                0 -> correctAnswer + random.nextInt(20)
+                else -> correctAnswer + random.nextInt(7)
+            }
+
+            val value = correctAnswer + offset
+
+            if (value > 0 && value != correctAnswer && !incorrectOptions.contains(value)) {
+                incorrectOptions.add(value)
             }
         }
 

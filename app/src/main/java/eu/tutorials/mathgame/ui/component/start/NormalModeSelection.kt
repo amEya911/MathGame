@@ -3,10 +3,9 @@ package eu.tutorials.mathgame.ui.component.start
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -14,25 +13,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import eu.tutorials.mathgame.R
+import eu.tutorials.mathgame.util.FirebaseUtils
 
 @Composable
 fun NormalModeSelection(
     onNormalModeClicked: () -> Unit,
     onBotModeClicked: () -> Unit
 ) {
+    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(Firebase.remoteConfig).maxPoints
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             Box(
@@ -52,7 +54,8 @@ fun NormalModeSelection(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -80,8 +83,9 @@ fun NormalModeSelection(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "The first player to solve the task gets a point. " +
-                                "For any wrong answer the opponent gets a point.",
+                        text = "The first player to solve the task gets a point. For any wrong answer the opponent gets a point." +
+                                (maxWinningPoints?.takeIf { it != 0L }
+                                    ?.let { " First to $it points wins." } ?: ""),
                         fontSize = 24.sp,
                         lineHeight = 34.sp,
                         textAlign = TextAlign.Center,
@@ -112,13 +116,17 @@ fun NormalModeSelection(
 
 @Composable
 fun StartPageButton(
-    modifier: Modifier = Modifier,
     icon: Painter,
     text: String,
     onClick: () -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
+
     Button(
-        onClick = onClick,
+        onClick = {
+            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            onClick()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
@@ -131,7 +139,7 @@ fun StartPageButton(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
-        ){
+        ) {
             Image(
                 painter = icon,
                 contentDescription = "Bot",

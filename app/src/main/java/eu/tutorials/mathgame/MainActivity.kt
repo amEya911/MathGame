@@ -7,24 +7,50 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
+import eu.tutorials.mathgame.data.model.RemoteColors
+import eu.tutorials.mathgame.data.model.toColorScheme
 import eu.tutorials.mathgame.navigation.AppNavGraph
-import eu.tutorials.mathgame.ui.screen.Game
 import eu.tutorials.mathgame.ui.theme.MathGameTheme
+import eu.tutorials.mathgame.util.FirebaseUtils
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val remoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 0
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+
         setContent {
-            MathGameTheme {
+            var remoteColors by remember { mutableStateOf<RemoteColors?>(null) }
+
+            LaunchedEffect(Unit) {
+                remoteConfig.fetchAndActivate().addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        remoteColors = FirebaseUtils.getRemoteColors(remoteConfig)
+                    }
+                }
+            }
+            MathGameTheme (
+                colorSchemeOverride = remoteColors?.toColorScheme()
+            ){
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AppNavGraph(modifier = Modifier.padding(innerPadding))
+                    AppNavGraph(
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }

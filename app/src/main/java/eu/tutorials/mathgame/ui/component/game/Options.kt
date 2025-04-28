@@ -56,7 +56,6 @@ fun Options(
                         if (option.option == selectedOption) {
                             onOptionPositioned?.invoke(bounds)
                         }
-
                     }
             ) {
                 Button(
