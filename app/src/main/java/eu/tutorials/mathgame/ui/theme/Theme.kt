@@ -10,8 +10,20 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import eu.tutorials.mathgame.data.model.RemoteColors
+import eu.tutorials.mathgame.data.model.toColorScheme
+import eu.tutorials.mathgame.ui.viewmodel.ConfigViewModel
+import eu.tutorials.mathgame.util.FirebaseUtils
 
 private val DarkColorScheme = darkColorScheme(
     background = normalModeBackground,
@@ -49,12 +61,12 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun MathGameTheme(
+    remoteColors: RemoteColors?,
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    colorSchemeOverride: ColorScheme? = null,
     dynamicColor: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
+    val colorSchemeOverride = remoteColors?.toColorScheme()
     val colorScheme = when {
         colorSchemeOverride != null -> colorSchemeOverride
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {

@@ -3,6 +3,7 @@ package eu.tutorials.mathgame.ui.component.game
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Firebase
@@ -19,10 +20,7 @@ import kotlin.random.Random
 
 @Composable
 fun GameSideEffects(
-    context: Context,
     gameState: GameState,
-    gameMode: GameMode,
-    botLevel: BotLevel?,
     isSelected: Boolean,
     onExitClicked: () -> Unit,
     updateCircleRadius: (Dp) -> Unit,
@@ -33,6 +31,7 @@ fun GameSideEffects(
     remoteConfig: FirebaseRemoteConfig
 ) {
     val countdown = gameState.countdown
+    val context = LocalContext.current
 
     val someoneWon = if (maxWinningPoints != null && maxWinningPoints != 0L) {
         gameState.blueScore == maxWinningPoints.toInt() || gameState.redScore == maxWinningPoints.toInt()
@@ -64,7 +63,7 @@ fun GameSideEffects(
         soundRes?.let { Sound.playSound(context, it) }
     }
 
-    if (gameMode == GameMode.BOT && isAppInForeground && !someoneWon) {
+    if (gameState.gameMode == GameMode.BOT && isAppInForeground && !someoneWon) {
         LaunchedEffect(
             gameState.operands,
             gameState.selectedBlueOption,
@@ -75,7 +74,7 @@ fun GameSideEffects(
                 gameState.selectedBlueOption == null &&
                 gameState.selectedRedOption == null
             ) {
-                val botConfig = FirebaseUtils.getBotConfig(remoteConfig, botLevel)
+                val botConfig = FirebaseUtils.getBotConfig(remoteConfig, gameState.botLevel)
                 val (minDelay, maxDelay, accuracy) = botConfig
 
                 delay(Random.nextLong(minDelay, maxDelay))

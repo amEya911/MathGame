@@ -1,51 +1,45 @@
 package eu.tutorials.mathgame
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.google.firebase.Firebase
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.remoteConfig
-import com.google.firebase.remoteconfig.remoteConfigSettings
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import eu.tutorials.mathgame.data.model.RemoteColors
-import eu.tutorials.mathgame.data.model.toColorScheme
 import eu.tutorials.mathgame.navigation.AppNavGraph
 import eu.tutorials.mathgame.ui.theme.MathGameTheme
-import eu.tutorials.mathgame.util.FirebaseUtils
-import jakarta.inject.Inject
+import eu.tutorials.mathgame.ui.viewmodel.ConfigViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var remoteConfig: FirebaseRemoteConfig
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         setContent {
-            var remoteColors by remember { mutableStateOf<RemoteColors?>(null) }
+            val configViewModel: ConfigViewModel = hiltViewModel()
+            val configState by configViewModel.remoteState.collectAsState()
+            val remoteColors = configState.remoteColors
 
-            LaunchedEffect(Unit) {
-                remoteColors = FirebaseUtils.getRemoteColors(remoteConfig)
-            }
-            MathGameTheme (
-                colorSchemeOverride = remoteColors?.toColorScheme()
-            ){
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AppNavGraph(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            if (remoteColors == null) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                MathGameTheme(remoteColors = remoteColors) {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        AppNavGraph(modifier = Modifier.padding(innerPadding))
+                    }
                 }
             }
         }

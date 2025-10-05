@@ -18,7 +18,6 @@ import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 @Composable
 fun PlayerSections(
     gameState: GameState,
-    gameMode: GameMode,
     gameViewModel: GameViewModel,
     onOptionPositioned: (Rect) -> Unit
 ) {
@@ -36,7 +35,7 @@ fun PlayerSections(
             color = Color(0xFFD8E0FE),
             borderColor = MaterialTheme.colorScheme.inversePrimary,
             selectedOption = gameState.selectedBlueOption,
-            enabled = if (gameMode == GameMode.NORMAL) {
+            enabled = if (gameState.gameMode == GameMode.NORMAL) {
                 (gameState.selectedBlueOption == null) && (gameState.selectedRedOption == null)
             } else false,
             onOptionClick = {

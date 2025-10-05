@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import eu.tutorials.mathgame.R
@@ -19,7 +20,6 @@ import eu.tutorials.mathgame.util.Sound
 
 @Composable
 fun AnimationExplosion(
-    context: Context,
     gameState: GameState,
     selectedButtonRect: Rect?,
     animatedRadius: Dp
@@ -27,6 +27,7 @@ fun AnimationExplosion(
     val selectedOptionText = gameState.selectedBlueOption ?: gameState.selectedRedOption
     val selectedOption = gameState.options?.firstOrNull { it.option == selectedOptionText }
     val isCorrect = selectedOption?.answer == true
+    val context = LocalContext.current
 
     LaunchedEffect(selectedOption) {
         Sound.playSound(context, if (isCorrect) R.raw.win else R.raw.lose)

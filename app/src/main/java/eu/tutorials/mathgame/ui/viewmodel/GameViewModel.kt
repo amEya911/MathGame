@@ -52,6 +52,13 @@ class GameViewModel @Inject constructor(
             GameEvent.StartCountDownAndNextQuestion -> {
                 startCountdownAndNextQuestion()
             }
+
+            is GameEvent.InitializeGameModeAndBotLevel -> {
+                _gameState.value = _gameState.value.copy(
+                    gameMode = event.gameMode,
+                    botLevel = event.botLevel
+                )
+            }
         }
     }
 

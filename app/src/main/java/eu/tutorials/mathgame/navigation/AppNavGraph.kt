@@ -14,7 +14,6 @@ import androidx.navigation.navArgument
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
-import eu.tutorials.mathgame.data.model.RemoteColors
 import eu.tutorials.mathgame.ui.screen.Game
 import eu.tutorials.mathgame.ui.screen.Start
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
@@ -65,6 +64,7 @@ fun AppNavGraph(
 
             LaunchedEffect(Unit) {
                 gameViewModel.onEvent(GameEvent.StartCountDownAndNextQuestion)
+                gameViewModel.onEvent(GameEvent.InitializeGameModeAndBotLevel(gameMode, botLevel))
             }
 
             Game(
@@ -72,9 +72,7 @@ fun AppNavGraph(
                 gameState = gameSate,
                 onExitClicked = {
                     navController.popBackStack()
-                },
-                gameMode = gameMode,
-                botLevel = botLevel
+                }
             )
         }
     }

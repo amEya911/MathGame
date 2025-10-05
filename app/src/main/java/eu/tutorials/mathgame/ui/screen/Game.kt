@@ -46,14 +46,10 @@ import kotlinx.coroutines.delay
 fun Game(
     gameViewModel: GameViewModel,
     gameState: GameState,
-    onExitClicked: () -> Unit,
-    gameMode: GameMode,
-    botLevel: BotLevel?
+    onExitClicked: () -> Unit
 ) {
     val isAppInForeground = rememberAppInForeground()
     val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(Firebase.remoteConfig).maxPoints
-
-    val context = LocalContext.current
     val countdown = gameState.countdown
 
     val isSelected = gameState.selectedBlueOption != null || gameState.selectedRedOption != null
@@ -68,10 +64,7 @@ fun Game(
     )
 
     GameSideEffects(
-        context = context,
         gameState = gameState,
-        gameMode = gameMode,
-        botLevel = botLevel,
         isSelected = isSelected,
         onExitClicked = onExitClicked,
         updateCircleRadius = { circleRadius = it },
@@ -93,7 +86,7 @@ fun Game(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
         ) {
             if (isSelected && selectedButtonRect != null) {
-                AnimationExplosion(context, gameState, selectedButtonRect, animatedRadius)
+                AnimationExplosion(gameState, selectedButtonRect, animatedRadius)
             }
 
             Box(
@@ -109,7 +102,6 @@ fun Game(
 
             PlayerSections(
                 gameState = gameState,
-                gameMode = gameMode,
                 gameViewModel = gameViewModel,
                 onOptionPositioned = { rect -> selectedButtonRect = rect }
             )
