@@ -23,8 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.util.FirebaseUtils
 

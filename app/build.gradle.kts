@@ -1,7 +1,10 @@
+import org.gradle.kotlin.dsl.composeCompiler
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.compose.compiler)
     kotlin("kapt")
     alias(libs.plugins.google.gms.google.services)
 
@@ -9,12 +12,12 @@ plugins {
 
 android {
     namespace = "eu.tutorials.mathgame"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "eu.tutorials.mathgame"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 28
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -37,20 +40,28 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+        }
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    // Allow references to generated code
+    kapt {
+        correctErrorTypes = true
+    }
+}
+
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    stabilityConfigurationFiles = listOf(rootProject.layout.projectDirectory.file("stability_config.conf"))
 }
 
 dependencies {
@@ -58,12 +69,13 @@ dependencies {
     implementation (libs.dagger.hilt.android)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.firebase.config)
-    //implementation(libs.firebase.analytics)
+    implementation(libs.firebase.analytics)
     kapt (libs.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(platform(libs.firebase.bom))
+    implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

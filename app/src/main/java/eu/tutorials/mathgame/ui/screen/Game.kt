@@ -16,8 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
