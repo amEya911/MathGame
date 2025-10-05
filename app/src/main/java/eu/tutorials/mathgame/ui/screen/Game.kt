@@ -1,11 +1,21 @@
 package eu.tutorials.mathgame.ui.screen
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -15,12 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
+import eu.tutorials.mathgame.data.state.GameState
 import eu.tutorials.mathgame.ui.component.game.AnimationExplosion
 import eu.tutorials.mathgame.ui.component.game.CountDown
 import eu.tutorials.mathgame.ui.component.game.ExitButton
@@ -34,7 +44,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun Game(
-    gameViewModel: GameViewModel = hiltViewModel(),
+    gameViewModel: GameViewModel,
+    gameState: GameState,
     onExitClicked: () -> Unit,
     gameMode: GameMode,
     botLevel: BotLevel?
@@ -43,7 +54,6 @@ fun Game(
     val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(Firebase.remoteConfig).maxPoints
 
     val context = LocalContext.current
-    val gameState = gameViewModel.gameState.collectAsState().value
     val countdown = gameState.countdown
 
     val isSelected = gameState.selectedBlueOption != null || gameState.selectedRedOption != null

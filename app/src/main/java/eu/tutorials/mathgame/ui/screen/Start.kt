@@ -13,17 +13,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
+import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.ui.component.start.BotModeSelection
 import eu.tutorials.mathgame.ui.component.start.NormalModeSelection
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 
 @Composable
 fun Start(
-    startViewModel: StartViewModel = hiltViewModel(),
+    startViewModel: StartViewModel,
+    startState: StartState,
     onStartClicked: (GameMode, BotLevel?) -> Unit
 ) {
-    val startState = startViewModel.startState.collectAsState().value
-
     LaunchedEffect(startState.isGameStartTriggered) {
         if (startState.isGameStartTriggered) {
             onStartClicked(

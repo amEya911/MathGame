@@ -28,7 +28,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.util.FirebaseUtils
-import eu.tutorials.mathgame.util.RemoteConfigManager
 
 @Composable
 fun NormalModeSelection(

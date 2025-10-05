@@ -13,7 +13,6 @@ import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.GameState
 import eu.tutorials.mathgame.util.FirebaseUtils
-import eu.tutorials.mathgame.util.RemoteConfigManager
 import eu.tutorials.mathgame.util.Sound
 import kotlinx.coroutines.delay
 import kotlin.random.Random

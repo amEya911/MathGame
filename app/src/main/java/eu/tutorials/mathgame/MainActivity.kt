@@ -23,7 +23,6 @@ import eu.tutorials.mathgame.data.model.toColorScheme
 import eu.tutorials.mathgame.navigation.AppNavGraph
 import eu.tutorials.mathgame.ui.theme.MathGameTheme
 import eu.tutorials.mathgame.util.FirebaseUtils
-import eu.tutorials.mathgame.util.RemoteConfigManager
 import jakarta.inject.Inject
 
 @AndroidEntryPoint

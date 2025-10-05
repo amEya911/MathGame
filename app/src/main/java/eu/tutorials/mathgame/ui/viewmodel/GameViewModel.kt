@@ -29,10 +29,6 @@ class GameViewModel @Inject constructor(
 
     private val mutex = Mutex()
 
-    init {
-        startCountdownAndNextQuestion()
-    }
-
     fun onEvent(event: GameEvent) {
         when (event) {
             GameEvent.OnNextQuestion -> {
@@ -51,6 +47,10 @@ class GameViewModel @Inject constructor(
 
             GameEvent.OnReset -> {
                 _gameState.value = GameState()
+            }
+
+            GameEvent.StartCountDownAndNextQuestion -> {
+                startCountdownAndNextQuestion()
             }
         }
     }
