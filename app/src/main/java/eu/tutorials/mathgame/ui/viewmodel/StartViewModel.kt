@@ -6,6 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.StartState
+import eu.tutorials.mathgame.navigation.AppScreen
+import eu.tutorials.mathgame.navigation.replaceWith
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -22,11 +24,12 @@ class StartViewModel @Inject constructor(
 
     fun onEvent(event: StartEvent) {
         when (event) {
-            StartEvent.OnNormalModeClicked -> {
+            is StartEvent.OnNormalModeClicked -> {
                 _startState.value = StartState(
                     gameMode = GameMode.NORMAL,
                     isGameStartTriggered = true
                 )
+                onEvent(StartEvent.NavigateToGameScreen(event.navigator))
             }
 
             StartEvent.OnBotModeClicked -> {
@@ -40,6 +43,7 @@ class StartViewModel @Inject constructor(
                     botLevel = event.level,
                     isGameStartTriggered = true
                 )
+                onEvent(StartEvent.NavigateToGameScreen(event.navigator))
             }
 
             StartEvent.OnReset -> {
@@ -50,6 +54,13 @@ class StartViewModel @Inject constructor(
                 _startState.value = _startState.value.copy(
                     gameMode = GameMode.NORMAL
                 )
+            }
+
+            is StartEvent.NavigateToGameScreen -> {
+                val gameMode = _startState.value.gameMode
+                val botLevel = _startState.value.botLevel
+                event.navigator.replaceWith("${AppScreen.Game.route}/$gameMode?botLevel=$botLevel")
+                onEvent(StartEvent.OnReset)
             }
         }
     }

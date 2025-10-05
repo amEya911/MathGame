@@ -31,6 +31,7 @@ import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.GameState
+import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.component.game.AnimationExplosion
 import eu.tutorials.mathgame.ui.component.game.CountDown
 import eu.tutorials.mathgame.ui.component.game.ExitButton
@@ -46,7 +47,7 @@ import kotlinx.coroutines.delay
 fun Game(
     gameViewModel: GameViewModel,
     gameState: GameState,
-    onExitClicked: () -> Unit
+    navigator: Navigator
 ) {
     val isAppInForeground = rememberAppInForeground()
     val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(Firebase.remoteConfig).maxPoints
@@ -66,7 +67,9 @@ fun Game(
     GameSideEffects(
         gameState = gameState,
         isSelected = isSelected,
-        onExitClicked = onExitClicked,
+        onExitClicked = {
+            gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
+        },
         updateCircleRadius = { circleRadius = it },
         onBotAnswer = { option, isBlue ->
             gameViewModel.onEvent(GameEvent.OnOptionButtonClicked(option, isBlue))
@@ -128,7 +131,7 @@ fun Game(
                 delay(3000)
                 showWinnerBox = true
                 delay(2000)
-                onExitClicked()
+                gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
             }
 
             if (showWinnerBox) {

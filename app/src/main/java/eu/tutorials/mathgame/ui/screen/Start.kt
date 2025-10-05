@@ -14,6 +14,7 @@ import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.StartState
+import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.component.start.BotModeSelection
 import eu.tutorials.mathgame.ui.component.start.NormalModeSelection
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
@@ -22,18 +23,8 @@ import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 fun Start(
     startViewModel: StartViewModel,
     startState: StartState,
-    onStartClicked: (GameMode, BotLevel?) -> Unit
+    navigator: Navigator,
 ) {
-    LaunchedEffect(startState.isGameStartTriggered) {
-        if (startState.isGameStartTriggered) {
-            onStartClicked(
-                startState.gameMode,
-                startState.botLevel
-            )
-            startViewModel.onEvent(StartEvent.OnReset)
-        }
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +35,7 @@ fun Start(
             GameMode.NORMAL -> {
                 NormalModeSelection(
                     onNormalModeClicked = {
-                        startViewModel.onEvent(StartEvent.OnNormalModeClicked)
+                        startViewModel.onEvent(StartEvent.OnNormalModeClicked(navigator))
                     },
                     onBotModeClicked = {
                         startViewModel.onEvent(StartEvent.OnBotModeClicked)
@@ -56,7 +47,7 @@ fun Start(
             GameMode.BOT -> {
                 BotModeSelection(
                     onBotLevelSelected = { level ->
-                        startViewModel.onEvent(StartEvent.OnBotLevelSelected(level))
+                        startViewModel.onEvent(StartEvent.OnBotLevelSelected(level, navigator))
                     },
                     onBackClicked = {
                         startViewModel.onEvent(StartEvent.OnBackClicked)

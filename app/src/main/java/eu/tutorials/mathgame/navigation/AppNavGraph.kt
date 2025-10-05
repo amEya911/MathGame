@@ -31,6 +31,15 @@ fun AppNavGraph(
     val gameViewModel: GameViewModel = hiltViewModel()
     val gameSate by gameViewModel.gameState.collectAsState()
 
+    val navigator = { fromRoute: String?, toRoute: String? ->
+        if (toRoute == null) {
+            navController.popBackStack()
+            Unit
+        } else if (fromRoute == null) {
+            navController.navigate(toRoute)
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = AppScreen.Start.route
@@ -39,9 +48,7 @@ fun AppNavGraph(
             Start(
                 startViewModel = startViewModel,
                 startState = startState,
-                onStartClicked = {gameMode, botLevel ->
-                    navController.navigate("${AppScreen.Game.route}/$gameMode?botLevel=$botLevel")
-                }
+                navigator = navigator
             )
         }
 
@@ -70,6 +77,7 @@ fun AppNavGraph(
             Game(
                 gameViewModel = gameViewModel,
                 gameState = gameSate,
+                navigator = navigator,
                 onExitClicked = {
                     navController.popBackStack()
                 }
@@ -81,4 +89,20 @@ fun AppNavGraph(
 sealed class AppScreen(val route: String) {
     data object Start: AppScreen("start")
     data object Game: AppScreen("game")
+}
+
+fun interface Navigator {
+    fun navigate(fromRoute: String?, toRoute: String?)
+}
+
+fun Navigator.navigateTo(toRoute: String, fromRoute: String) {
+    this.navigate(fromRoute = fromRoute, toRoute = toRoute)
+}
+
+fun Navigator.popBack() {
+    this.navigate(null, null)
+}
+
+fun Navigator.replaceWith(toRoute: String) {
+    this.navigate(fromRoute = null, toRoute = toRoute)
 }

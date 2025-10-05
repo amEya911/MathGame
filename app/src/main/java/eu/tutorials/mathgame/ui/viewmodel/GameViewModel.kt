@@ -9,6 +9,7 @@ import eu.tutorials.mathgame.data.model.Answer
 import eu.tutorials.mathgame.data.model.Operand
 import eu.tutorials.mathgame.data.model.Option
 import eu.tutorials.mathgame.data.state.GameState
+import eu.tutorials.mathgame.navigation.popBack
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,10 @@ class GameViewModel @Inject constructor(
 
     fun onEvent(event: GameEvent) {
         when (event) {
+            is GameEvent.NavigateBackStack -> {
+                event.navigator.popBack()
+            }
+
             GameEvent.OnNextQuestion -> {
                 nextQuestion()
             }
