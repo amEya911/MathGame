@@ -37,6 +37,14 @@ class GameViewModel @Inject constructor(
                 onEvent(GameEvent.OnReset)
             }
 
+            is GameEvent.ChangeCircleRadius -> {
+                _gameState.value = _gameState.value.copy(circleRadius = event.newRadius)
+            }
+
+            is GameEvent.ChangeSelectedButtonRect -> {
+                _gameState.value = _gameState.value.copy(selectedButtonRect = event.newRect)
+            }
+
             GameEvent.OnNextQuestion -> {
                 nextQuestion()
             }

@@ -19,7 +19,6 @@ import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 fun PlayerSections(
     gameState: GameState,
     gameViewModel: GameViewModel,
-    onOptionPositioned: (Rect) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -46,7 +45,9 @@ fun PlayerSections(
                     )
                 )
             },
-            onOptionPositioned = onOptionPositioned
+            onOptionPositioned = {
+                gameViewModel.onEvent(GameEvent.ChangeSelectedButtonRect(it))
+            }
         )
 
         GameSection(
@@ -66,7 +67,9 @@ fun PlayerSections(
                     )
                 )
             },
-            onOptionPositioned = onOptionPositioned
+            onOptionPositioned = {
+                gameViewModel.onEvent(GameEvent.ChangeSelectedButtonRect(it))
+            }
         )
     }
 }

@@ -5,13 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import eu.tutorials.mathgame.data.event.StartEvent
-import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
@@ -41,6 +36,7 @@ fun Start(
 
             GameMode.BOT -> {
                 BotModeSelection(
+                    startState = startState,
                     onEvent = startViewModel::onEvent,
                     navigator = navigator,
                 )

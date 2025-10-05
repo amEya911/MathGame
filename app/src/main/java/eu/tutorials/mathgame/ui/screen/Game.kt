@@ -22,14 +22,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.firebase.Firebase
-import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.data.event.GameEvent
-import eu.tutorials.mathgame.data.model.BotLevel
-import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.GameState
 import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.component.game.AnimationExplosion
@@ -39,7 +34,6 @@ import eu.tutorials.mathgame.ui.component.game.GameSideEffects
 import eu.tutorials.mathgame.ui.component.game.PlayerSections
 import eu.tutorials.mathgame.ui.component.game.ScoreIndicator
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
-import eu.tutorials.mathgame.util.AppLifecycle.rememberAppInForeground
 import eu.tutorials.mathgame.util.FirebaseUtils
 import kotlinx.coroutines.delay
 
@@ -54,9 +48,9 @@ fun Game(
     val countdown = gameState.countdown
 
     val isSelected = gameState.selectedBlueOption != null || gameState.selectedRedOption != null
-    var circleRadius by remember { mutableStateOf(0.dp) }
+    val circleRadius = gameState.circleRadius
 
-    var selectedButtonRect by remember { mutableStateOf<Rect?>(null) }
+    val selectedButtonRect = gameState.selectedButtonRect
 
     val animatedRadius by animateDpAsState(
         targetValue = circleRadius,
@@ -68,7 +62,6 @@ fun Game(
         gameViewModel = gameViewModel,
         gameState = gameState,
         navigator = navigator,
-        updateCircleRadius = { circleRadius = it },
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -94,8 +87,7 @@ fun Game(
 
             PlayerSections(
                 gameState = gameState,
-                gameViewModel = gameViewModel,
-                onOptionPositioned = { rect -> selectedButtonRect = rect }
+                gameViewModel = gameViewModel
             )
 
             Box(

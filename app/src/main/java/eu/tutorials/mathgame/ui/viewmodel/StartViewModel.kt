@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.tutorials.mathgame.data.event.StartEvent
+import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.AppScreen
@@ -11,6 +12,7 @@ import eu.tutorials.mathgame.navigation.replaceWith
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class StartViewModel @Inject constructor(
@@ -61,6 +63,18 @@ class StartViewModel @Inject constructor(
                 val botLevel = _startState.value.botLevel
                 event.navigator.replaceWith("${AppScreen.Game.route}/$gameMode?botLevel=$botLevel")
                 onEvent(StartEvent.OnReset)
+            }
+
+            is StartEvent.ChangeSliderPosition -> {
+                val oldLevel = _startState.value.previousLevel
+                val levels = listOf(BotLevel.EASY, BotLevel.MEDIUM, BotLevel.HARD)
+                val newLevel = levels[event.newPosition.roundToInt()]
+
+                _startState.value = _startState.value.copy(
+                    sliderPosition = event.newPosition,
+                    isLevelIncreasing = newLevel.ordinal > oldLevel.ordinal,
+                    previousLevel = newLevel
+                )
             }
         }
     }

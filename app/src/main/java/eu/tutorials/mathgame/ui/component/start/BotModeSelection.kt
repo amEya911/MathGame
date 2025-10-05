@@ -36,12 +36,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,20 +50,20 @@ import androidx.compose.ui.zIndex
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.model.BotLevel
+import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
 import kotlin.math.roundToInt
 
 @Composable
 fun BotModeSelection(
+    startState: StartState,
     onEvent: (StartEvent) -> Unit,
     navigator: Navigator
 ) {
-    val levels = listOf(BotLevel.EASY, BotLevel.MEDIUM, BotLevel.HARD)
-    var sliderPosition by remember { mutableFloatStateOf(0f) }
-    var previousLevel by remember { mutableStateOf(BotLevel.EASY) }
+    val sliderPosition = startState.sliderPosition
 
+    val levels = listOf(BotLevel.EASY, BotLevel.MEDIUM, BotLevel.HARD)
     val selectedLevel = levels[sliderPosition.roundToInt()]
-    val isLevelIncreasing = selectedLevel.ordinal > previousLevel.ordinal
 
     val painterId = when (selectedLevel) {
         BotLevel.EASY -> R.drawable.easy
@@ -83,10 +77,6 @@ fun BotModeSelection(
         BotLevel.HARD -> MaterialTheme.colorScheme.tertiaryContainer
     }
 
-    LaunchedEffect(sliderPosition) {
-        previousLevel = selectedLevel
-    }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -95,13 +85,15 @@ fun BotModeSelection(
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .verticalScroll(rememberScrollState())
     ) {
-        BotImage(painterId, isLevelIncreasing, color)
+        BotImage(painterId, color, startState)
 
         BotLevelCard(
             selectedLevel = selectedLevel,
             color = color,
             sliderPosition = sliderPosition,
-            onSliderChange = { sliderPosition = it },
+            onSliderChange = {
+                onEvent(StartEvent.ChangeSliderPosition(it))
+                             },
             onPlayClicked = {
                 onEvent(StartEvent.OnBotLevelSelected(selectedLevel, navigator))
             }
@@ -116,7 +108,8 @@ fun BotModeSelection(
 }
 
 @Composable
-fun BotImage(painterId: Int, isLevelIncreasing: Boolean, color: Color) {
+fun BotImage(painterId: Int, color: Color, startState: StartState) {
+    val isLevelIncreasing = startState.isLevelIncreasing
     Box(
         modifier = Modifier
             .size(100.dp)

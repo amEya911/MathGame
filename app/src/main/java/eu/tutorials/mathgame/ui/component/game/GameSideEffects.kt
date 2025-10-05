@@ -27,7 +27,6 @@ fun GameSideEffects(
     gameViewModel: GameViewModel,
     gameState: GameState,
     navigator: Navigator,
-    updateCircleRadius: (Dp) -> Unit,
 ) {
     val remoteConfig = gameViewModel.config
     val isAppInForeground = rememberAppInForeground()
@@ -44,9 +43,9 @@ fun GameSideEffects(
 
     LaunchedEffect(isSelected) {
         if (isSelected) {
-            updateCircleRadius(350.dp)
+            gameViewModel.onEvent(GameEvent.ChangeCircleRadius(350.dp))
             delay(2500)
-            updateCircleRadius(0.dp)
+            gameViewModel.onEvent(GameEvent.ChangeCircleRadius(0.dp))
         }
     }
 
