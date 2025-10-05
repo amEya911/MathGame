@@ -1,6 +1,7 @@
 package eu.tutorials.mathgame.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.model.GameMode
@@ -10,10 +11,14 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class StartViewModel @Inject constructor() : ViewModel() {
+class StartViewModel @Inject constructor(
+    private val remoteConfig: FirebaseRemoteConfig
+) : ViewModel() {
 
     private val _startState = MutableStateFlow(StartState())
     val startState: StateFlow<StartState> = _startState
+
+    val config get() = remoteConfig
 
     fun onEvent(event: StartEvent) {
         when (event) {

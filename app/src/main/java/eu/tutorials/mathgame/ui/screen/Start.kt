@@ -35,7 +35,9 @@ fun Start(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         when (startState.gameMode) {
@@ -46,7 +48,8 @@ fun Start(
                     },
                     onBotModeClicked = {
                         startViewModel.onEvent(StartEvent.OnBotModeClicked)
-                    }
+                    },
+                    remoteConfig = startViewModel.config
                 )
             }
 

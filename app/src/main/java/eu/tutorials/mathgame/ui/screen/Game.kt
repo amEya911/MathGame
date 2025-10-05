@@ -72,7 +72,8 @@ fun Game(
             gameViewModel.onEvent(GameEvent.OnReset)
         },
         isAppInForeground = isAppInForeground,
-        maxWinningPoints = maxWinningPoints
+        maxWinningPoints = maxWinningPoints,
+        remoteConfig = gameViewModel.config
     )
 
     Box(modifier = Modifier.fillMaxSize()) {

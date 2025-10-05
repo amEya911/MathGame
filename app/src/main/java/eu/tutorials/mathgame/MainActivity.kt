@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,27 +23,22 @@ import eu.tutorials.mathgame.data.model.toColorScheme
 import eu.tutorials.mathgame.navigation.AppNavGraph
 import eu.tutorials.mathgame.ui.theme.MathGameTheme
 import eu.tutorials.mathgame.util.FirebaseUtils
+import eu.tutorials.mathgame.util.RemoteConfigManager
+import jakarta.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var remoteConfig: FirebaseRemoteConfig
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val remoteConfig = Firebase.remoteConfig
-        val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 0
-        }
-        remoteConfig.setConfigSettingsAsync(configSettings)
 
         setContent {
             var remoteColors by remember { mutableStateOf<RemoteColors?>(null) }
 
             LaunchedEffect(Unit) {
-                remoteConfig.fetchAndActivate().addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        remoteColors = FirebaseUtils.getRemoteColors(remoteConfig)
-                    }
-                }
+                remoteColors = FirebaseUtils.getRemoteColors(remoteConfig)
             }
             MathGameTheme (
                 colorSchemeOverride = remoteColors?.toColorScheme()

@@ -24,16 +24,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.util.FirebaseUtils
+import eu.tutorials.mathgame.util.RemoteConfigManager
 
 @Composable
 fun NormalModeSelection(
     onNormalModeClicked: () -> Unit,
-    onBotModeClicked: () -> Unit
+    onBotModeClicked: () -> Unit,
+    remoteConfig: FirebaseRemoteConfig
 ) {
-    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(Firebase.remoteConfig).maxPoints
+    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(remoteConfig).maxPoints
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {

@@ -1,23 +1,26 @@
 package eu.tutorials.mathgame.ui.component.game
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.GameState
 import eu.tutorials.mathgame.util.FirebaseUtils
+import eu.tutorials.mathgame.util.RemoteConfigManager
 import eu.tutorials.mathgame.util.Sound
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 @Composable
 fun GameSideEffects(
-    context: android.content.Context,
+    context: Context,
     gameState: GameState,
     gameMode: GameMode,
     botLevel: BotLevel?,
@@ -27,7 +30,8 @@ fun GameSideEffects(
     onBotAnswer: (Int, Boolean) -> Unit,
     onReset: () -> Unit,
     isAppInForeground: Boolean,
-    maxWinningPoints: Long?
+    maxWinningPoints: Long?,
+    remoteConfig: FirebaseRemoteConfig
 ) {
     val countdown = gameState.countdown
 
@@ -72,7 +76,7 @@ fun GameSideEffects(
                 gameState.selectedBlueOption == null &&
                 gameState.selectedRedOption == null
             ) {
-                val botConfig = FirebaseUtils.getBotConfig(Firebase.remoteConfig, botLevel)
+                val botConfig = FirebaseUtils.getBotConfig(remoteConfig, botLevel)
                 val (minDelay, maxDelay, accuracy) = botConfig
 
                 delay(Random.nextLong(minDelay, maxDelay))
