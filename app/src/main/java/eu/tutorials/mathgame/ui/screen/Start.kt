@@ -34,24 +34,15 @@ fun Start(
         when (startState.gameMode) {
             GameMode.NORMAL -> {
                 NormalModeSelection(
-                    onNormalModeClicked = {
-                        startViewModel.onEvent(StartEvent.OnNormalModeClicked(navigator))
-                    },
-                    onBotModeClicked = {
-                        startViewModel.onEvent(StartEvent.OnBotModeClicked)
-                    },
-                    remoteConfig = startViewModel.config
+                    startViewModel = startViewModel,
+                    navigator = navigator
                 )
             }
 
             GameMode.BOT -> {
                 BotModeSelection(
-                    onBotLevelSelected = { level ->
-                        startViewModel.onEvent(StartEvent.OnBotLevelSelected(level, navigator))
-                    },
-                    onBackClicked = {
-                        startViewModel.onEvent(StartEvent.OnBackClicked)
-                    }
+                    onEvent = startViewModel::onEvent,
+                    navigator = navigator,
                 )
             }
         }

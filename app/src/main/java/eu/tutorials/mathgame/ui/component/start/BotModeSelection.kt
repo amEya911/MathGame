@@ -54,13 +54,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import eu.tutorials.mathgame.R
+import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.model.BotLevel
+import eu.tutorials.mathgame.navigation.Navigator
 import kotlin.math.roundToInt
 
 @Composable
 fun BotModeSelection(
-    onBotLevelSelected: (BotLevel) -> Unit,
-    onBackClicked: () -> Unit
+    onEvent: (StartEvent) -> Unit,
+    navigator: Navigator
 ) {
     val levels = listOf(BotLevel.EASY, BotLevel.MEDIUM, BotLevel.HARD)
     var sliderPosition by remember { mutableFloatStateOf(0f) }
@@ -100,10 +102,16 @@ fun BotModeSelection(
             color = color,
             sliderPosition = sliderPosition,
             onSliderChange = { sliderPosition = it },
-            onPlayClicked = { onBotLevelSelected(selectedLevel) }
+            onPlayClicked = {
+                onEvent(StartEvent.OnBotLevelSelected(selectedLevel, navigator))
+            }
         )
 
-        BackButton(onBackClicked)
+        BackButton(
+            onBackClicked = {
+                onEvent(StartEvent.OnBackClicked)
+            }
+        )
     }
 }
 

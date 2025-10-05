@@ -78,9 +78,6 @@ fun AppNavGraph(
                 gameViewModel = gameViewModel,
                 gameState = gameSate,
                 navigator = navigator,
-                onExitClicked = {
-                    navController.popBackStack()
-                }
             )
         }
     }

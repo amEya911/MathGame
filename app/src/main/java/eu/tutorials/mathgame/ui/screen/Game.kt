@@ -49,8 +49,8 @@ fun Game(
     gameState: GameState,
     navigator: Navigator
 ) {
-    val isAppInForeground = rememberAppInForeground()
-    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(Firebase.remoteConfig).maxPoints
+    val remoteConfig = gameViewModel.config
+    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(remoteConfig).maxPoints
     val countdown = gameState.countdown
 
     val isSelected = gameState.selectedBlueOption != null || gameState.selectedRedOption != null
@@ -65,21 +65,10 @@ fun Game(
     )
 
     GameSideEffects(
+        gameViewModel = gameViewModel,
         gameState = gameState,
-        isSelected = isSelected,
-        onExitClicked = {
-            gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
-        },
+        navigator = navigator,
         updateCircleRadius = { circleRadius = it },
-        onBotAnswer = { option, isBlue ->
-            gameViewModel.onEvent(GameEvent.OnOptionButtonClicked(option, isBlue))
-        },
-        onReset = {
-            gameViewModel.onEvent(GameEvent.OnReset)
-        },
-        isAppInForeground = isAppInForeground,
-        maxWinningPoints = maxWinningPoints,
-        remoteConfig = gameViewModel.config
     )
 
     Box(modifier = Modifier.fillMaxSize()) {

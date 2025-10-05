@@ -34,6 +34,7 @@ class GameViewModel @Inject constructor(
         when (event) {
             is GameEvent.NavigateBackStack -> {
                 event.navigator.popBack()
+                onEvent(GameEvent.OnReset)
             }
 
             GameEvent.OnNextQuestion -> {

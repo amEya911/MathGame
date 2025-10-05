@@ -27,14 +27,17 @@ import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.R
+import eu.tutorials.mathgame.data.event.StartEvent
+import eu.tutorials.mathgame.navigation.Navigator
+import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 import eu.tutorials.mathgame.util.FirebaseUtils
 
 @Composable
 fun NormalModeSelection(
-    onNormalModeClicked: () -> Unit,
-    onBotModeClicked: () -> Unit,
-    remoteConfig: FirebaseRemoteConfig
+    navigator: Navigator,
+    startViewModel: StartViewModel,
 ) {
+    val remoteConfig = startViewModel.config
     val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(remoteConfig).maxPoints
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -101,13 +104,17 @@ fun NormalModeSelection(
                     StartPageButton(
                         icon = painterResource(id = R.drawable.user),
                         text = "FRIEND",
-                        onClick = onNormalModeClicked
+                        onClick = {
+                            startViewModel.onEvent(StartEvent.OnNormalModeClicked(navigator))
+                        }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     StartPageButton(
                         icon = painterResource(id = R.drawable.robot),
                         text = "BOT",
-                        onClick = onBotModeClicked
+                        onClick = {
+                            startViewModel.onEvent(StartEvent.OnBotModeClicked)
+                        }
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }

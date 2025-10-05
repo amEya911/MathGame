@@ -10,9 +10,13 @@ import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.R
+import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.GameState
+import eu.tutorials.mathgame.navigation.Navigator
+import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
+import eu.tutorials.mathgame.util.AppLifecycle.rememberAppInForeground
 import eu.tutorials.mathgame.util.FirebaseUtils
 import eu.tutorials.mathgame.util.Sound
 import kotlinx.coroutines.delay
@@ -20,18 +24,17 @@ import kotlin.random.Random
 
 @Composable
 fun GameSideEffects(
+    gameViewModel: GameViewModel,
     gameState: GameState,
-    isSelected: Boolean,
-    onExitClicked: () -> Unit,
+    navigator: Navigator,
     updateCircleRadius: (Dp) -> Unit,
-    onBotAnswer: (Int, Boolean) -> Unit,
-    onReset: () -> Unit,
-    isAppInForeground: Boolean,
-    maxWinningPoints: Long?,
-    remoteConfig: FirebaseRemoteConfig
 ) {
+    val remoteConfig = gameViewModel.config
+    val isAppInForeground = rememberAppInForeground()
     val countdown = gameState.countdown
     val context = LocalContext.current
+    val isSelected = gameState.selectedBlueOption != null || gameState.selectedRedOption != null
+    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(remoteConfig).maxPoints
 
     val someoneWon = if (maxWinningPoints != null && maxWinningPoints != 0L) {
         gameState.blueScore == maxWinningPoints.toInt() || gameState.redScore == maxWinningPoints.toInt()
@@ -49,8 +52,7 @@ fun GameSideEffects(
 
     LaunchedEffect(gameState.isExitClicked) {
         if (gameState.isExitClicked) {
-            onExitClicked()
-            onReset()
+            gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
         }
     }
 
@@ -85,7 +87,9 @@ fun GameSideEffects(
                 else
                     options.filterNot { it.answer }.randomOrNull()
 
-                botChoice?.let { onBotAnswer(it.option, true) }
+                botChoice?.let {
+                    gameViewModel.onEvent(GameEvent.OnOptionButtonClicked(it.option, true))
+                }
             }
         }
     }
