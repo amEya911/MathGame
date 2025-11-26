@@ -30,7 +30,8 @@ fun Start(
             GameMode.NORMAL -> {
                 NormalModeSelection(
                     startViewModel = startViewModel,
-                    navigator = navigator
+                    navigator = navigator,
+                    startState = startState
                 )
             }
 

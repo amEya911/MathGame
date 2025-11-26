@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.event.StartEvent
+import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 import eu.tutorials.mathgame.util.FirebaseUtils
@@ -37,6 +39,7 @@ import eu.tutorials.mathgame.util.FirebaseUtils
 fun NormalModeSelection(
     navigator: Navigator,
     startViewModel: StartViewModel,
+    startState: StartState
 ) {
     val remoteConfig = startViewModel.config
     val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(remoteConfig).maxPoints
@@ -104,7 +107,40 @@ fun NormalModeSelection(
                 }
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Select number of rounds",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = startState.levelSliderPosition.toInt().inc().toString(),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+
+            BotLevelSlider(
+                sliderPosition = startState.levelSliderPosition,
+                onValueChange = {
+                    startViewModel.onEvent(StartEvent.ChangeLevelSliderPosition(it))
+                },
+                sliderHeight = 45.dp,
+                thumbHeight = 45.dp,
+                trackHeight = 30.dp,
+                padding = 16.dp,
+                endValue = 19f,
+                color = MaterialTheme.colorScheme.primaryContainer
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             // 🎮 Buttons
             StartPageButton(

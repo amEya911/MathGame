@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -177,7 +178,11 @@ fun BotLevelCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            BotLevelSlider(sliderPosition, onSliderChange, color)
+            BotLevelSlider(
+                sliderPosition = sliderPosition,
+                onValueChange = onSliderChange,
+                color = color
+            )
 
             Text(
                 text = "Drag to adjust\ndifficulty",
@@ -201,16 +206,21 @@ fun BotLevelCard(
 fun BotLevelSlider(
     sliderPosition: Float,
     onValueChange: (Float) -> Unit,
+    sliderHeight: Dp = 60.dp,
+    thumbHeight: Dp = 48.dp,
+    trackHeight: Dp = 36.dp,
+    padding: Dp = 32.dp,
+    endValue: Float = 2f,
     color: Color
 ) {
     Slider(
         value = sliderPosition,
         onValueChange = onValueChange,
-        valueRange = 0f..2f,
+        valueRange = 0f..endValue,
         modifier = Modifier
-            .padding(horizontal = 32.dp)
+            .padding(horizontal = padding)
             .fillMaxWidth()
-            .height(60.dp),
+            .height(sliderHeight),
         colors = SliderDefaults.colors(
             thumbColor = color,
             activeTrackColor = Color.LightGray,
@@ -222,7 +232,7 @@ fun BotLevelSlider(
         thumb = {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(thumbHeight)
                     .background(color, shape = CircleShape)
                     .border(12.dp, Color.White, CircleShape)
             )
@@ -231,7 +241,7 @@ fun BotLevelSlider(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(36.dp)
+                    .height(trackHeight)
                     .background(Color.LightGray, RoundedCornerShape(50))
                     .border(8.dp, Color.White, RoundedCornerShape(50))
             )

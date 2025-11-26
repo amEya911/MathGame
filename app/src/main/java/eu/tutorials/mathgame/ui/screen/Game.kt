@@ -44,7 +44,7 @@ fun Game(
     navigator: Navigator
 ) {
     val remoteConfig = gameViewModel.config
-    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(remoteConfig).maxPoints
+    val maxWinningPoints = gameState.maxWinningPoints
     val countdown = gameState.countdown
 
     val isSelected = gameState.selectedBlueOption != null || gameState.selectedRedOption != null

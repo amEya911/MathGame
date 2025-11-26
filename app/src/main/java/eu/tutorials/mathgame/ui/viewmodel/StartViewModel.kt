@@ -1,5 +1,6 @@
 package eu.tutorials.mathgame.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +28,7 @@ class StartViewModel @Inject constructor(
     fun onEvent(event: StartEvent) {
         when (event) {
             is StartEvent.OnNormalModeClicked -> {
-                _startState.value = StartState(
+                _startState.value = _startState.value.copy(
                     gameMode = GameMode.NORMAL,
                     isGameStartTriggered = true
                 )
@@ -61,7 +62,8 @@ class StartViewModel @Inject constructor(
             is StartEvent.NavigateToGameScreen -> {
                 val gameMode = _startState.value.gameMode
                 val botLevel = _startState.value.botLevel
-                event.navigator.replaceWith("${AppScreen.Game.route}/$gameMode?botLevel=$botLevel")
+                val maxWinningPoints = _startState.value.levelSliderPosition.inc().toLong()
+                event.navigator.replaceWith("${AppScreen.Game.route}/$gameMode/$maxWinningPoints?botLevel=$botLevel")
                 onEvent(StartEvent.OnReset)
             }
 
@@ -74,6 +76,12 @@ class StartViewModel @Inject constructor(
                     sliderPosition = event.newPosition,
                     isLevelIncreasing = newLevel.ordinal > oldLevel.ordinal,
                     previousLevel = newLevel
+                )
+            }
+
+            is StartEvent.ChangeLevelSliderPosition -> {
+                _startState.value = _startState.value.copy(
+                    levelSliderPosition = event.newPosition
                 )
             }
         }

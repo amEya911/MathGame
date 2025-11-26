@@ -1,5 +1,6 @@
 package eu.tutorials.mathgame.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,7 +54,7 @@ fun AppNavGraph(
         }
 
         composable(
-            route = "${AppScreen.Game.route}/{gameMode}?botLevel={botLevel}",
+            route = "${AppScreen.Game.route}/{gameMode}/{maxWinningPoints}?botLevel={botLevel}",
             arguments = listOf(
                 navArgument("gameMode") { type = NavType.StringType },
                 navArgument("botLevel") {
@@ -65,13 +66,17 @@ fun AppNavGraph(
         ) { backStackEntry ->
             val gameModeArg = backStackEntry.arguments?.getString("gameMode")
             val botLevelArg = backStackEntry.arguments?.getString("botLevel")
+            val maxWinningPointsArg =
+                backStackEntry.arguments?.getString("maxWinningPoints")?.toLongOrNull()
 
             val gameMode = GameMode.valueOf(gameModeArg ?: GameMode.NORMAL.name)
             val botLevel = botLevelArg?.takeIf { it.isNotBlank() }?.let { BotLevel.valueOf(it) }
+            val maxWinningPoints = maxWinningPointsArg ?: 10L
 
             LaunchedEffect(Unit) {
                 gameViewModel.onEvent(GameEvent.StartCountDownAndNextQuestion)
                 gameViewModel.onEvent(GameEvent.InitializeGameModeAndBotLevel(gameMode, botLevel))
+                gameViewModel.onEvent(GameEvent.SetMaxWinningPoints(maxWinningPoints))
             }
 
             Game(

@@ -13,6 +13,7 @@ sealed interface GameEvent {
     data class NavigateBackStack(val navigator: Navigator): GameEvent
     data class InitializeGameModeAndBotLevel(val gameMode: GameMode, val botLevel: BotLevel?): GameEvent
     data object StartCountDownAndNextQuestion: GameEvent
+    data class SetMaxWinningPoints(val maxWinningPoints: Long): GameEvent
     data class OnOptionButtonClicked(val selectedOption: Int, val isBlueSection: Boolean): GameEvent
     data object OnExitClicked: GameEvent
     data object OnReset: GameEvent

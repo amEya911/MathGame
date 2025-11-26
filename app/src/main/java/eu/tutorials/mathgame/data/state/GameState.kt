@@ -9,6 +9,7 @@ import eu.tutorials.mathgame.data.model.Operand
 import eu.tutorials.mathgame.data.model.Option
 
 data class GameState(
+    val maxWinningPoints: Long? = null,
     val selectedButtonRect: Rect? = null,
     val circleRadius: Dp = 0.dp,
     val gameMode: GameMode = GameMode.NORMAL,

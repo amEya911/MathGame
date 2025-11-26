@@ -53,6 +53,12 @@ class GameViewModel @Inject constructor(
                 handleOptionClick(event.selectedOption, event.isBlueSection)
             }
 
+            is GameEvent.SetMaxWinningPoints -> {
+                _gameState.value = _gameState.value.copy(
+                    maxWinningPoints = event.maxWinningPoints
+                )
+            }
+
             GameEvent.OnExitClicked -> {
                 _gameState.value = _gameState.value.copy(
                     isExitClicked = true
