@@ -1,6 +1,5 @@
 package eu.tutorials.mathgame.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel

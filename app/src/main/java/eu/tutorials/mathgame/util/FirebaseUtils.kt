@@ -68,9 +68,4 @@ object FirebaseUtils {
 
         return BotConfig(minDelay, maxDelay, accuracy)
     }
-
-    fun getMaxWinningPoints(remoteConfig: FirebaseRemoteConfig): MaxWinningPoints {
-        val maxWinningPoints = remoteConfig.getLong("max_winning_points")
-        return MaxWinningPoints(maxWinningPoints)
-    }
 }

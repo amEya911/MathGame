@@ -5,6 +5,16 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +31,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
@@ -41,9 +52,6 @@ fun NormalModeSelection(
     startViewModel: StartViewModel,
     startState: StartState
 ) {
-    val remoteConfig = startViewModel.config
-    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(remoteConfig).maxPoints
-
     val gradient = Brush.verticalGradient(
         colors = listOf(
             MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
@@ -96,7 +104,6 @@ fun NormalModeSelection(
                         text = buildString {
                             append("The first player to solve the task gets a point. ")
                             append("For any wrong answer, the opponent gets a point.")
-                            if (maxWinningPoints != 0L) append(" First to $maxWinningPoints points wins!")
                         },
                         fontSize = 18.sp,
                         lineHeight = 26.sp,
@@ -109,22 +116,8 @@ fun NormalModeSelection(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Select number of rounds",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = startState.levelSliderPosition.toInt().inc().toString(),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-            }
+            RoundsHeader(startState)
+
             Spacer(modifier = Modifier.height(12.dp))
 
             BotLevelSlider(
@@ -137,7 +130,7 @@ fun NormalModeSelection(
                 trackHeight = 30.dp,
                 padding = 16.dp,
                 endValue = 19f,
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primary
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -169,6 +162,72 @@ fun NormalModeSelection(
         }
     }
 }
+
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun RoundsHeader(startState: StartState) {
+    val rounds = startState.levelSliderPosition.toInt().inc()
+
+    // Track previous value to know direction (increase/decrease)
+    var previousRounds by remember { mutableStateOf(rounds) }
+    val isIncreasing = rounds > previousRounds
+
+    LaunchedEffect(rounds) {
+        previousRounds = rounds
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Select number of rounds",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+        )
+
+        AnimatedContent(
+            targetState = rounds,
+            transitionSpec = {
+                if (isIncreasing) {
+                    // Number increased → old goes left, new comes from right
+                    (slideInHorizontally(
+                        animationSpec = tween(250)
+                    ) { fullWidth -> fullWidth } + fadeIn()) togetherWith
+                            (slideOutHorizontally(
+                                animationSpec = tween(250)
+                            ) { fullWidth -> -fullWidth } + fadeOut())
+                } else {
+                    // Number decreased → old goes right, new comes from left
+                    (slideInHorizontally(
+                        animationSpec = tween(250)
+                    ) { fullWidth -> -fullWidth } + fadeIn()) togetherWith
+                            (slideOutHorizontally(
+                                animationSpec = tween(250)
+                            ) { fullWidth -> fullWidth } + fadeOut())
+                }.using(SizeTransform(clip = false))
+            },
+            label = "rounds_animation"
+        ) { value ->
+            Text(
+                text = value.toString(),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.graphicsLayer {
+                    // Little 3D-ish tilt like a rotating globe
+                    cameraDistance = 8 * density
+                    rotationY = if (isIncreasing) -10f else 10f
+                }
+            )
+        }
+    }
+}
+
+
 
 @Composable
 fun StartPageButton(

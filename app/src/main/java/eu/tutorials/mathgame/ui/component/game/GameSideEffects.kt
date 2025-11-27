@@ -33,7 +33,7 @@ fun GameSideEffects(
     val countdown = gameState.countdown
     val context = LocalContext.current
     val isSelected = gameState.selectedBlueOption != null || gameState.selectedRedOption != null
-    val maxWinningPoints = FirebaseUtils.getMaxWinningPoints(remoteConfig).maxPoints
+    val maxWinningPoints = gameState.maxWinningPoints
 
     val someoneWon = if (maxWinningPoints != null && maxWinningPoints != 0L) {
         gameState.blueScore == maxWinningPoints.toInt() || gameState.redScore == maxWinningPoints.toInt()

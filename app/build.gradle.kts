@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.firebase.config)
     implementation(libs.firebase.analytics)
+    implementation(libs.androidx.compose.animation)
     kapt (libs.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
