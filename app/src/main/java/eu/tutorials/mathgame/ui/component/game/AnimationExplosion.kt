@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.state.GameState
+import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.util.Sound
 
 @Composable
@@ -34,9 +35,9 @@ fun AnimationExplosion(
     }
 
     val backgroundColor = if (isCorrect)
-        MaterialTheme.colorScheme.errorContainer
+        AppTheme.colors.correctAnswerColor
     else
-        MaterialTheme.colorScheme.error
+        AppTheme.colors.wrongAnswerColor
 
     Box(
         modifier = Modifier

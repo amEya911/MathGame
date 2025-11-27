@@ -12,6 +12,7 @@ import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.component.start.BotModeSelection
 import eu.tutorials.mathgame.ui.component.start.NormalModeSelection
+import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 
 @Composable
@@ -23,7 +24,7 @@ fun Start(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(AppTheme.colors.normalModeBackground),
         contentAlignment = Alignment.Center
     ) {
         when (startState.gameMode) {

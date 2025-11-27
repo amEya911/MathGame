@@ -53,6 +53,7 @@ import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
+import eu.tutorials.mathgame.ui.theme.AppTheme
 import kotlin.math.roundToInt
 
 @Composable
@@ -73,9 +74,9 @@ fun BotModeSelection(
     }
 
     val color = when (selectedLevel) {
-        BotLevel.EASY -> MaterialTheme.colorScheme.primaryContainer
-        BotLevel.MEDIUM -> MaterialTheme.colorScheme.secondaryContainer
-        BotLevel.HARD -> MaterialTheme.colorScheme.tertiaryContainer
+        BotLevel.EASY -> AppTheme.colors.easyColor
+        BotLevel.MEDIUM -> AppTheme.colors.mediumColor
+        BotLevel.HARD -> AppTheme.colors.hardColor
     }
 
     Column(
@@ -83,7 +84,7 @@ fun BotModeSelection(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(AppTheme.colors.botModeBackground)
             .verticalScroll(rememberScrollState())
     ) {
         BotImage(painterId, color, startState)
@@ -149,7 +150,7 @@ fun BotLevelCard(
         modifier = Modifier
             .height(500.dp)
             .width(350.dp)
-            .background(MaterialTheme.colorScheme.inverseSurface, shape = MaterialTheme.shapes.medium)
+            .background(AppTheme.colors.botModeBox, shape = MaterialTheme.shapes.medium)
             .zIndex(-1f),
         contentAlignment = Alignment.Center
     ) {
@@ -170,8 +171,9 @@ fun BotLevelCard(
             ) { level ->
                 Text(
                     text = level.name,
-                    fontSize = 40.sp,
-                    fontWeight = FontWeight.ExtraBold,
+                    style = AppTheme.typography.xxxLarge.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    ),
                     color = color
                 )
             }
@@ -187,10 +189,10 @@ fun BotLevelCard(
             Text(
                 text = "Drag to adjust\ndifficulty",
                 color = Color.Black,
-                fontSize = 25.sp,
-                lineHeight = 34.sp,
+                style = AppTheme.typography.xLarge.copy(
+                    fontWeight = FontWeight.Bold
+                ),
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 8.dp)
             )
 
@@ -264,7 +266,9 @@ fun PlayButton(color: Color, onClick: () -> Unit) {
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = RoundedCornerShape(24.dp)
     ) {
-        Text("PLAY", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text("PLAY", style = AppTheme.typography.large.copy(
+            fontWeight = FontWeight.Bold
+        ),)
     }
 }
 
@@ -290,8 +294,9 @@ fun BackButton(onBackClicked: () -> Unit) {
         Text(
             text = "Back",
             color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
+            style = AppTheme.typography.large.copy(
+                fontWeight = FontWeight.Bold
+            ),
         )
     }
 }

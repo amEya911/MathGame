@@ -43,6 +43,9 @@ import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
+import eu.tutorials.mathgame.ui.theme.AppTheme
+import eu.tutorials.mathgame.ui.theme.botModeBackground
+import eu.tutorials.mathgame.ui.theme.primaryColor
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 import eu.tutorials.mathgame.util.FirebaseUtils
 
@@ -52,17 +55,11 @@ fun NormalModeSelection(
     startViewModel: StartViewModel,
     startState: StartState
 ) {
-    val gradient = Brush.verticalGradient(
-        colors = listOf(
-            MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
-            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.9f)
-        )
-    )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(AppTheme.colors.botModeBackground)
             .padding(20.dp)
     ) {
         Column(
@@ -77,11 +74,11 @@ fun NormalModeSelection(
             // 🎯 Game Title
             Text(
                 text = "MATH QUIZ",
-                fontSize = 46.sp,
-                fontWeight = FontWeight.ExtraBold,
+                style = AppTheme.typography.xxxxLarge.copy(
+                    fontWeight = FontWeight.ExtraBold
+                ),
                 color = Color.White,
                 textAlign = TextAlign.Center,
-                lineHeight = 50.sp
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -105,11 +102,11 @@ fun NormalModeSelection(
                             append("The first player to solve the task gets a point. ")
                             append("For any wrong answer, the opponent gets a point.")
                         },
-                        fontSize = 18.sp,
-                        lineHeight = 26.sp,
+                        style = AppTheme.typography.medium.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
                         textAlign = TextAlign.Center,
                         color = Color.Black,
-                        fontWeight = FontWeight.Medium
                     )
                 }
             }
@@ -130,7 +127,7 @@ fun NormalModeSelection(
                 trackHeight = 30.dp,
                 padding = 16.dp,
                 endValue = 19f,
-                color = MaterialTheme.colorScheme.primary
+                color = AppTheme.colors.primaryColor
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -140,7 +137,7 @@ fun NormalModeSelection(
                 icon = painterResource(id = R.drawable.user),
                 text = "FRIEND",
                 subText = "Play with your buddy!",
-                color = MaterialTheme.colorScheme.secondary,
+                color = AppTheme.colors.normalModeButton,
                 onClick = {
                     startViewModel.onEvent(StartEvent.OnNormalModeClicked(navigator))
                 }
@@ -152,7 +149,7 @@ fun NormalModeSelection(
                 icon = painterResource(id = R.drawable.robot),
                 text = "BOT",
                 subText = "Challenge the AI",
-                color = MaterialTheme.colorScheme.tertiary,
+                color = AppTheme.colors.normalModeTopBackground,
                 onClick = {
                     startViewModel.onEvent(StartEvent.OnBotModeClicked)
                 }
@@ -186,8 +183,9 @@ fun RoundsHeader(startState: StartState) {
     ) {
         Text(
             text = "Select number of rounds",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
+            style = AppTheme.typography.large.copy(
+                fontWeight = FontWeight.Bold
+            ),
         )
 
         AnimatedContent(
@@ -215,10 +213,10 @@ fun RoundsHeader(startState: StartState) {
         ) { value ->
             Text(
                 text = value.toString(),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
+                style = AppTheme.typography.large.copy(
+                    fontWeight = FontWeight.Bold
+                ),
                 modifier = Modifier.graphicsLayer {
-                    // Little 3D-ish tilt like a rotating globe
                     cameraDistance = 8 * density
                     rotationY = if (isIncreasing) -10f else 10f
                 }
@@ -289,13 +287,16 @@ fun StartPageButton(
                 Text(
                     text = text,
                     color = Color.White,
-                    fontSize = 34.sp,
-                    fontWeight = FontWeight.Bold
+                    style = AppTheme.typography.xxLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
                 Text(
                     text = subText,
                     color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 14.sp
+                    style = AppTheme.typography.xSmall.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 )
             }
         }

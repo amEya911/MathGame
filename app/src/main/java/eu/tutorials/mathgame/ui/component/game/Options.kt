@@ -20,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.data.model.Option
+import eu.tutorials.mathgame.ui.theme.AppTheme
 
 @Composable
 fun Options(
@@ -42,8 +44,8 @@ fun Options(
 
             val backgroundColor = when {
                 selectedOption == null -> color
-                option.option == selectedOption && isCorrect -> MaterialTheme.colorScheme.errorContainer
-                option.option == selectedOption && !isCorrect -> MaterialTheme.colorScheme.error
+                option.option == selectedOption && isCorrect -> AppTheme.colors.correctAnswerColor
+                option.option == selectedOption && !isCorrect -> AppTheme.colors.wrongAnswerColor
                 else -> color
             }
 
@@ -76,7 +78,7 @@ fun Options(
                     Text(
                         text = option.option.toString(),
                         color = borderColor,
-                        fontSize = 24.sp,
+                        style = AppTheme.typography.xLarge,
                         maxLines = 1
                     )
                 }

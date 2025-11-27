@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.data.event.GameEvent
+import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 
 @Composable
@@ -40,8 +41,9 @@ fun ExitButton(gameViewModel: GameViewModel) {
                 text = "EXIT",
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 25.dp, end = 20.dp),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                style = AppTheme.typography.large.copy(
+                    fontWeight = FontWeight.Bold
+                ),
             )
         }
     }

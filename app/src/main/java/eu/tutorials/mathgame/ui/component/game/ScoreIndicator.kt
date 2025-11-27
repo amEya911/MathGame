@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.data.state.GameState
+import eu.tutorials.mathgame.ui.theme.AppTheme
 
 @Composable
 fun ScoreIndicator(
@@ -31,16 +32,18 @@ fun ScoreIndicator(
     ) {
         Text(
             text = gameState.redScore.toString(),
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold
+            color = AppTheme.colors.primaryColor,
+            style = AppTheme.typography.medium.copy(
+                fontWeight = FontWeight.SemiBold
+            )
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = gameState.blueScore.toString(),
-            color = MaterialTheme.colorScheme.inversePrimary,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold
+            color = AppTheme.colors.primaryInverseColor,
+            style = AppTheme.typography.medium.copy(
+                fontWeight = FontWeight.SemiBold
+            )
         )
     }
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.data.event.GameEvent
@@ -33,6 +34,7 @@ import eu.tutorials.mathgame.ui.component.game.ExitButton
 import eu.tutorials.mathgame.ui.component.game.GameSideEffects
 import eu.tutorials.mathgame.ui.component.game.PlayerSections
 import eu.tutorials.mathgame.ui.component.game.ScoreIndicator
+import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 import eu.tutorials.mathgame.util.FirebaseUtils
 import kotlinx.coroutines.delay
@@ -43,7 +45,6 @@ fun Game(
     gameState: GameState,
     navigator: Navigator
 ) {
-    val remoteConfig = gameViewModel.config
     val maxWinningPoints = gameState.maxWinningPoints
     val countdown = gameState.countdown
 
@@ -68,7 +69,7 @@ fun Game(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppTheme.colors.botModeBackground)
         ) {
             if (isSelected && selectedButtonRect != null) {
                 AnimationExplosion(gameState, selectedButtonRect, animatedRadius)
@@ -117,9 +118,9 @@ fun Game(
 
             if (showWinnerBox) {
                 val backgroundColor = if (gameState.blueScore == maxWinningPoints.toInt())
-                    MaterialTheme.colorScheme.inversePrimary
+                    AppTheme.colors.primaryInverseColor
                 else
-                    MaterialTheme.colorScheme.primary
+                    AppTheme.colors.primaryColor
 
                 Box(modifier = Modifier
                     .fillMaxSize()
@@ -128,7 +129,9 @@ fun Game(
                 ) {
                     Text(
                         text = if (gameState.blueScore == maxWinningPoints.toInt()) "Blue Wins!" else "Red Wins!",
-                        fontSize = 32.sp,
+                        style = AppTheme.typography.xLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
                         color = Color.White,
                         modifier = Modifier.align(Alignment.Center)
                     )

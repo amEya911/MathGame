@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.GameState
+import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 
 @Composable
@@ -32,7 +33,7 @@ fun PlayerSections(
             options = gameState.options ?: emptyList(),
             rotation = 180f,
             color = Color(0xFFD8E0FE),
-            borderColor = MaterialTheme.colorScheme.inversePrimary,
+            borderColor = AppTheme.colors.primaryInverseColor,
             selectedOption = gameState.selectedBlueOption,
             enabled = if (gameState.gameMode == GameMode.NORMAL) {
                 (gameState.selectedBlueOption == null) && (gameState.selectedRedOption == null)

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import eu.tutorials.mathgame.ui.theme.AppTheme
 
 @Composable
 fun CountDown(countdown: Int) {
@@ -38,7 +39,7 @@ fun CountDown(countdown: Int) {
     ) {
         Text(
             text = countdown.toString(),
-            fontSize = 100.sp,
+            style = AppTheme.typography.xxxxxLarge,
             color = Color.White,
             modifier = Modifier.scale(scale.value)
         )
