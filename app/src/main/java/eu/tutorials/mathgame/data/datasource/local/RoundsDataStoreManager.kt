@@ -15,8 +15,8 @@ private val Context.dataStore by preferencesDataStore(name = "rounds_prefs")
 
 @Singleton
 class RoundsDataStoreManager @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
+    @param:ApplicationContext private val context: Context
+){
 
     companion object {
         private val LEVEL_SLIDER_KEY = floatPreferencesKey("level_slider_position")

@@ -1,20 +1,13 @@
 package eu.tutorials.mathgame.ui.component.game
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.firebase.Firebase
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.remoteConfig
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.event.GameEvent
-import eu.tutorials.mathgame.data.model.BotLevel
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.GameState
-import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 import eu.tutorials.mathgame.util.AppLifecycle.rememberAppInForeground
 import eu.tutorials.mathgame.util.FirebaseUtils
@@ -26,7 +19,6 @@ import kotlin.random.Random
 fun GameSideEffects(
     gameViewModel: GameViewModel,
     gameState: GameState,
-    navigator: Navigator,
 ) {
     val remoteConfig = gameViewModel.config
     val isAppInForeground = rememberAppInForeground()

@@ -1,14 +1,11 @@
 package eu.tutorials.mathgame.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,16 +19,8 @@ import eu.tutorials.mathgame.ui.screen.Start
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 
-fun NavGraphBuilder.appNavGraph(navController: NavHostController) {
-    composable(route = Graph.APP) {
-        AppNavGraph(navController)
-    }
-}
-
 @Composable
-fun AppNavGraph(
-    navHostController: NavHostController
-) {
+fun AppNavGraph(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
     val startViewModel: StartViewModel = hiltViewModel()
@@ -103,10 +92,6 @@ sealed class AppScreen(val route: String) {
 
 fun interface Navigator {
     fun navigate(fromRoute: String?, toRoute: String?)
-}
-
-fun Navigator.navigateTo(toRoute: String, fromRoute: String) {
-    this.navigate(fromRoute = fromRoute, toRoute = toRoute)
 }
 
 fun Navigator.popBack() {

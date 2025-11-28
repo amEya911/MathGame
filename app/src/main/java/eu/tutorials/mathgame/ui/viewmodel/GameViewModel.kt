@@ -167,7 +167,7 @@ class GameViewModel @Inject constructor(
                 else -> correctAnswer + randomOffset
             }
 
-            if (incorrectValue > 0 && incorrectValue != correctAnswer && !incorrectOptions.contains(
+            if (incorrectValue > 0 && !incorrectOptions.contains(
                     incorrectValue
                 )
             ) {

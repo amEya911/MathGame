@@ -13,8 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.ui.theme.AppTheme
 
 @Composable

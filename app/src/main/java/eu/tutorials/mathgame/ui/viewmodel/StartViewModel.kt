@@ -2,7 +2,6 @@ package eu.tutorials.mathgame.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.tutorials.mathgame.data.datasource.local.RoundsDataStoreManager
 import eu.tutorials.mathgame.data.datasource.remote.AnalyticsLogger
@@ -22,7 +21,6 @@ import kotlin.math.roundToInt
 
 @HiltViewModel
 class StartViewModel @Inject constructor(
-    private val remoteConfig: FirebaseRemoteConfig,
     private val roundsDataStore: RoundsDataStoreManager,
     private val analyticsLogger: AnalyticsLogger
 ) : ViewModel() {
@@ -37,8 +35,6 @@ class StartViewModel @Inject constructor(
             _startState.value = _startState.value.copy(levelSliderPosition = savedLevel)
         }
     }
-
-    val config get() = remoteConfig
 
     fun onEvent(event: StartEvent) {
         when (event) {

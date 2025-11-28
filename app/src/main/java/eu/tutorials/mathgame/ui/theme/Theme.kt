@@ -7,9 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
 
 val DarkAppColors = AppColors(
@@ -125,72 +127,31 @@ val LocalAppTypography = compositionLocalOf { LightAppTypography }
 
 val LocalAppColors = compositionLocalOf { LightAppColors }
 
-//private val DarkColorScheme = darkColorScheme(
-//    background = normalModeBackground,
-//    surface = normalModeSurface,
-//    secondary = normalModeButton,
-//    onSecondary = normalModeText,
-//    tertiary = normalModeTopBackground,
-//    primaryContainer = easyColor,
-//    secondaryContainer = mediumColor,
-//    tertiaryContainer = hardColor,
-//    primary = primaryColor,
-//    inversePrimary = primaryInverseColor,
-//    error = wrongAnswerColor,
-//    errorContainer = correctAnswerColor,
-//    inverseSurface = botModeBox,
-//    surfaceVariant = botModeBackground
-//)
-//
-//private val LightColorScheme = lightColorScheme(
-//    background = normalModeBackground,
-//    surface = normalModeSurface,
-//    secondary = normalModeButton,
-//    onSecondary = normalModeText,
-//    tertiary = normalModeTopBackground,
-//    primaryContainer = easyColor,
-//    secondaryContainer = mediumColor,
-//    tertiaryContainer = hardColor,
-//    primary = primaryColor,
-//    inversePrimary = primaryInverseColor,
-//    error = wrongAnswerColor,
-//    errorContainer = correctAnswerColor,
-//    inverseSurface = botModeBox,
-//    surfaceVariant = botModeBackground
-//)
-
 @Composable
 fun MathGameTheme(
-    //remoteColors: RemoteColors?,
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-//    val colorSchemeOverride = remoteColors?.toColorScheme()
-//    val colorScheme = when {
-//        colorSchemeOverride != null -> colorSchemeOverride
-//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-//            val context = LocalContext.current
-//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-//        }
-//
-//        darkTheme -> DarkColorScheme
-//        else -> LightColorScheme
-//    }
-
     val customColors = if (darkTheme) DarkAppColors else LightAppColors
     val customTypography = if (darkTheme) DarkAppTypography else LightAppTypography
 
+    val baseDensity = LocalDensity.current
+    val fixedDensity = Density(
+        density = baseDensity.density,
+        fontScale = 1f
+    )
+
     CompositionLocalProvider(
         LocalAppColors provides customColors,
-        LocalAppTypography provides customTypography
+        LocalAppTypography provides customTypography,
+        LocalDensity provides fixedDensity,
     ) {
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
-}
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
+    }
 }
 
 object AppTheme {

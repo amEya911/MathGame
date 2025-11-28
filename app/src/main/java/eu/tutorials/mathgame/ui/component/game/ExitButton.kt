@@ -13,10 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.theme.AppTheme

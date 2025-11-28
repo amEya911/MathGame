@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,11 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.state.GameState
 import eu.tutorials.mathgame.navigation.Navigator
@@ -36,7 +33,6 @@ import eu.tutorials.mathgame.ui.component.game.PlayerSections
 import eu.tutorials.mathgame.ui.component.game.ScoreIndicator
 import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
-import eu.tutorials.mathgame.util.FirebaseUtils
 import kotlinx.coroutines.delay
 
 @Composable
@@ -62,7 +58,6 @@ fun Game(
     GameSideEffects(
         gameViewModel = gameViewModel,
         gameState = gameState,
-        navigator = navigator,
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
