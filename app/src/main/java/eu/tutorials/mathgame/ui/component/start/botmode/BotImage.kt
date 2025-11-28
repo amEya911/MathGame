@@ -22,7 +22,7 @@ import eu.tutorials.mathgame.data.state.StartState
 
 @Composable
 fun BotImage(painterId: Int, color: Color, startState: StartState) {
-    val isLevelIncreasing = startState.isLevelIncreasing
+    val isBotLevelIncreasing = startState.isBotLevelIncreasing
     Box(
         modifier = Modifier
             .size(100.dp)
@@ -34,7 +34,7 @@ fun BotImage(painterId: Int, color: Color, startState: StartState) {
         AnimatedContent(
             targetState = painterId,
             transitionSpec = {
-                val direction = if (isLevelIncreasing) 1 else -1
+                val direction = if (isBotLevelIncreasing) 1 else -1
                 slideInVertically(tween(300)) { it * direction } togetherWith
                         slideOutVertically(tween(300)) { -it * direction }
             },

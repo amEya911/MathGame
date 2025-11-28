@@ -16,16 +16,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.ui.theme.AppTheme
@@ -34,14 +28,7 @@ import eu.tutorials.mathgame.ui.theme.AppTheme
 @Composable
 fun RoundsHeader(startState: StartState) {
     val rounds = startState.levelSliderPosition.toInt().inc()
-
-    // Track previous value to know direction (increase/decrease)
-    var previousRounds by remember { mutableStateOf(rounds) }
-    val isIncreasing = rounds > previousRounds
-
-    LaunchedEffect(rounds) {
-        previousRounds = rounds
-    }
+    val isIncreasing = startState.isRoundLevelIncreasing
 
     Row(
         modifier = Modifier
@@ -66,7 +53,6 @@ fun RoundsHeader(startState: StartState) {
             targetState = rounds,
             transitionSpec = {
                 if (isIncreasing) {
-                    // Number increased → old goes left, new comes from right
                     (slideInHorizontally(
                         animationSpec = tween(250)
                     ) { fullWidth -> fullWidth } + fadeIn()) togetherWith
@@ -74,7 +60,6 @@ fun RoundsHeader(startState: StartState) {
                                 animationSpec = tween(250)
                             ) { fullWidth -> -fullWidth } + fadeOut())
                 } else {
-                    // Number decreased → old goes right, new comes from left
                     (slideInHorizontally(
                         animationSpec = tween(250)
                     ) { fullWidth -> -fullWidth } + fadeIn()) togetherWith

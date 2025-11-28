@@ -104,14 +104,18 @@ class StartViewModel @Inject constructor(
 
                 _startState.value = _startState.value.copy(
                     sliderPosition = event.newPosition,
-                    isLevelIncreasing = newLevel.ordinal > oldLevel.ordinal,
+                    isBotLevelIncreasing = newLevel.ordinal > oldLevel.ordinal,
                     previousLevel = newLevel
                 )
             }
 
             is StartEvent.ChangeLevelSliderPosition -> {
+                val oldLevel = _startState.value.previousLevelSliderPosition
+                val isRoundLevelIncreasing = _startState.value.levelSliderPosition.toInt().inc() > oldLevel
                 _startState.value = _startState.value.copy(
-                    levelSliderPosition = event.newPosition
+                    levelSliderPosition = event.newPosition,
+                    previousLevelSliderPosition = oldLevel,
+                    isRoundLevelIncreasing = isRoundLevelIncreasing
                 )
             }
         }

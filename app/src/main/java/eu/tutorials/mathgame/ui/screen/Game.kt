@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.state.GameState
@@ -103,10 +104,10 @@ fun Game(
 
     if (maxWinningPoints != null && maxWinningPoints != 0L) {
         if (gameState.blueScore == maxWinningPoints.toInt() || gameState.redScore == maxWinningPoints.toInt()) {
-            var showWinnerBox by remember { mutableStateOf(false) }
+            val showWinnerBox = gameState.showWinnerBox
             LaunchedEffect(Unit) {
                 delay(3000)
-                showWinnerBox = true
+                gameViewModel.onEvent(GameEvent.ShowWinnerBox)
                 delay(2000)
                 gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
             }
@@ -127,7 +128,9 @@ fun Game(
                         style = AppTheme.typography.xLarge.copy(
                             fontWeight = FontWeight.Bold
                         ),
-                        color = Color.White,
+                        color = AppTheme.colors.textWhite,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }

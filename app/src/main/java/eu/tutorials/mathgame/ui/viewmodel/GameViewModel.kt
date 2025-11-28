@@ -53,6 +53,12 @@ class GameViewModel @Inject constructor(
                 nextQuestion()
             }
 
+            GameEvent.ShowWinnerBox -> {
+                _gameState.value = _gameState.value.copy(
+                    showWinnerBox = true
+                )
+            }
+
             is GameEvent.OnOptionButtonClicked -> {
                 val selectedOption = event.selectedOption
                 val isBlueSection = event.isBlueSection
