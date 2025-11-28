@@ -110,14 +110,18 @@ class StartViewModel @Inject constructor(
             }
 
             is StartEvent.ChangeLevelSliderPosition -> {
-                val oldLevel = _startState.value.previousLevelSliderPosition
-                val isRoundLevelIncreasing = _startState.value.levelSliderPosition.toInt().inc() > oldLevel
+                val oldRound = _startState.value.previousLevelSliderPosition
+                val newRound = event.newPosition
+
+                val isRoundLevelIncreasing = newRound > oldRound
+
                 _startState.value = _startState.value.copy(
                     levelSliderPosition = event.newPosition,
-                    previousLevelSliderPosition = oldLevel,
+                    previousLevelSliderPosition = newRound,
                     isRoundLevelIncreasing = isRoundLevelIncreasing
                 )
             }
+
         }
     }
 }

@@ -6,8 +6,8 @@ import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
@@ -37,15 +37,15 @@ fun RoundsHeader(startState: StartState) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // "First to" + "points wins" as static/marquee text
         Text(
-            text = "Select number of rounds",
+            text = "First to",
             style = AppTheme.typography.large.copy(
                 fontWeight = FontWeight.Bold
             ),
             color = AppTheme.colors.textBlack,
             maxLines = 1,
             modifier = Modifier
-                .weight(1f)
                 .basicMarquee()
         )
 
@@ -53,19 +53,19 @@ fun RoundsHeader(startState: StartState) {
             targetState = rounds,
             transitionSpec = {
                 if (isIncreasing) {
-                    (slideInHorizontally(
+                    (slideInVertically(
                         animationSpec = tween(250)
-                    ) { fullWidth -> fullWidth } + fadeIn()) togetherWith
-                            (slideOutHorizontally(
+                    ) { height -> height } + fadeIn()) togetherWith
+                            (slideOutVertically(
                                 animationSpec = tween(250)
-                            ) { fullWidth -> -fullWidth } + fadeOut())
+                            ) { height -> -height } + fadeOut())
                 } else {
-                    (slideInHorizontally(
+                    (slideInVertically(
                         animationSpec = tween(250)
-                    ) { fullWidth -> -fullWidth } + fadeIn()) togetherWith
-                            (slideOutHorizontally(
+                    ) { height -> -height } + fadeIn()) togetherWith
+                            (slideOutVertically(
                                 animationSpec = tween(250)
-                            ) { fullWidth -> fullWidth } + fadeOut())
+                            ) { height -> height } + fadeOut())
                 }.using(SizeTransform(clip = false))
             },
             label = "rounds_animation"
@@ -73,7 +73,7 @@ fun RoundsHeader(startState: StartState) {
             Text(
                 text = value.toString(),
                 style = AppTheme.typography.large.copy(
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.ExtraBold
                 ),
                 color = AppTheme.colors.textBlack,
                 modifier = Modifier.graphicsLayer {
@@ -82,5 +82,14 @@ fun RoundsHeader(startState: StartState) {
                 }
             )
         }
+
+        Text(
+            text = "points wins",
+            style = AppTheme.typography.large.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = AppTheme.colors.textBlack,
+            maxLines = 1,
+        )
     }
 }
