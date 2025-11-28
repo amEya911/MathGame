@@ -1,19 +1,6 @@
 package eu.tutorials.mathgame.ui.component.start.normalmode
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
@@ -23,23 +10,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
-import eu.tutorials.mathgame.ui.component.start.botmode.BotLevelSlider
+import eu.tutorials.mathgame.ui.component.start.botmode.Slider
 import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 
@@ -110,7 +90,7 @@ fun NormalModeSelection(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            BotLevelSlider(
+            Slider(
                 sliderPosition = startState.levelSliderPosition,
                 onValueChange = {
                     startViewModel.onEvent(StartEvent.ChangeLevelSliderPosition(it))
