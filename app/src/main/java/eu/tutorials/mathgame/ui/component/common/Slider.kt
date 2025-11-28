@@ -1,5 +1,11 @@
 package eu.tutorials.mathgame.ui.component.common
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -13,8 +19,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -30,6 +38,16 @@ fun Slider(
     endValue: Float = 2f,
     color: Color
 ) {
+    val infiniteTransition = rememberInfiniteTransition()
+    val scaleAnim by infiniteTransition.animateFloat(
+        initialValue = 0.95f,
+        targetValue = 1.05f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(950, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
     Slider(
         value = sliderPosition,
         onValueChange = onValueChange,
@@ -46,14 +64,20 @@ fun Slider(
             activeTickColor = Color.Transparent,
             inactiveTickColor = Color.Transparent
         ),
+
         thumb = {
             Box(
                 modifier = Modifier
                     .size(thumbHeight)
-                    .background(color, shape = CircleShape)
+                    .graphicsLayer {
+                        scaleX = scaleAnim
+                        scaleY = scaleAnim
+                    }
+                    .background(color, CircleShape)
                     .border(12.dp, Color.White, CircleShape)
             )
         },
+
         track = {
             Box(
                 Modifier
