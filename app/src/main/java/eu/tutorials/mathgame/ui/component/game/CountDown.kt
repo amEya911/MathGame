@@ -34,13 +34,13 @@ fun CountDown(countdown: Int) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f)),
+            .background(AppTheme.colors.textBlack.copy(alpha = 0.5f)),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = countdown.toString(),
             style = AppTheme.typography.xxxxxLarge,
-            color = Color.White,
+            color = AppTheme.colors.textWhite,
             modifier = Modifier.scale(scale.value)
         )
     }

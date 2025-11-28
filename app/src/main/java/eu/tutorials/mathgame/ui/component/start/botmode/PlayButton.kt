@@ -31,8 +31,12 @@ fun PlayButton(color: Color, onClick: () -> Unit) {
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = RoundedCornerShape(24.dp)
     ) {
-        Text("PLAY", style = AppTheme.typography.large.copy(
-            fontWeight = FontWeight.Bold
-        ),)
+        Text(
+            text = "PLAY",
+            style = AppTheme.typography.large.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = AppTheme.colors.textWhite
+        )
     }
 }

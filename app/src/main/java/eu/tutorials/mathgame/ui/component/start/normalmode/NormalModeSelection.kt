@@ -50,19 +50,17 @@ fun NormalModeSelection(
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
-            // 🎯 Game Title
             Text(
                 text = "MATH QUIZ",
                 style = AppTheme.typography.xxxxLarge.copy(
                     fontWeight = FontWeight.ExtraBold
                 ),
-                color = Color.White,
+                color = AppTheme.colors.textWhite,
                 textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 🧾 Rules Card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -85,7 +83,7 @@ fun NormalModeSelection(
                             fontWeight = FontWeight.Medium
                         ),
                         textAlign = TextAlign.Center,
-                        color = Color.Black,
+                        color = AppTheme.colors.textBlack,
                     )
                 }
             }

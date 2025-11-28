@@ -14,7 +14,7 @@ fun Question(operands: List<Operand>, operation: Int) {
     if (operands.size < 2) return
     Text(
         text = "${operands[0].operand} ${OperationSymbol.getOperationSymbol(operation)} ${operands[1].operand}",
-        color = Color.Black,
+        color = AppTheme.colors.textBlack,
         style = AppTheme.typography.xxxLarge
     )
 }

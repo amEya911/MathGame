@@ -1,38 +1,22 @@
 package eu.tutorials.mathgame.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import eu.tutorials.mathgame.data.model.RemoteColors
-import eu.tutorials.mathgame.data.model.toColorScheme
-import eu.tutorials.mathgame.ui.viewmodel.ConfigViewModel
-import eu.tutorials.mathgame.util.FirebaseUtils
 
 val DarkAppColors = AppColors(
+    textBlack = Color(0xFF000000),
+    textWhite = Color(0xFFFFFFFF),
+    normalModeImageColor = Color(0xFFFFFFFF),
+
     normalModeBackground = Color(0xFFE0D7FF),
     normalModeSurface = Color(0xFFF7FEF7),
     normalModeButton = Color(0xFFB619AD),

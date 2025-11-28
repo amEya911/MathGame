@@ -82,25 +82,25 @@ fun StartPageButton(
                 painter = icon,
                 contentDescription = null,
                 modifier = Modifier.size(70.dp),
-                colorFilter = ColorFilter.tint(Color.White)
+                colorFilter = ColorFilter.tint(AppTheme.colors.normalModeImageColor)
             )
             Spacer(modifier = Modifier.width(24.dp))
             Column {
                 Text(
                     text = "PLAY VS",
-                    color = Color.White.copy(alpha = 0.9f),
+                    color = AppTheme.colors.textWhite.copy(alpha = 0.9f),
                     fontSize = 16.sp
                 )
                 Text(
                     text = text,
-                    color = Color.White,
+                    color = AppTheme.colors.textWhite,
                     style = AppTheme.typography.xxLarge.copy(
                         fontWeight = FontWeight.Bold
                     )
                 )
                 Text(
                     text = subText,
-                    color = Color.White.copy(alpha = 0.8f),
+                    color = AppTheme.colors.textWhite.copy(alpha = 0.8f),
                     style = AppTheme.typography.xSmall.copy(
                         fontWeight = FontWeight.ExtraBold
                     )

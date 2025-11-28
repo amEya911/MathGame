@@ -3,6 +3,9 @@ package eu.tutorials.mathgame.ui.theme
 import androidx.compose.ui.graphics.Color
 
 data class AppColors(
+    val textBlack: Color,
+    val textWhite: Color,
+    val normalModeImageColor: Color,
     val normalModeBackground: Color,
     val normalModeSurface: Color,
     val normalModeButton: Color,

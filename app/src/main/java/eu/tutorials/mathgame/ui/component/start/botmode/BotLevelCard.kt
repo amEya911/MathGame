@@ -77,7 +77,7 @@ fun BotLevelCard(
 
             Text(
                 text = "Drag to adjust\ndifficulty",
-                color = Color.Black,
+                color = AppTheme.colors.textBlack,
                 style = AppTheme.typography.xLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),

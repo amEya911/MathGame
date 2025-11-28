@@ -36,12 +36,12 @@ fun BackButton(onBackClicked: () -> Unit) {
         Icon(
             imageVector = Icons.Default.ArrowBack,
             contentDescription = "Back",
-            tint = Color.Black
+            tint = AppTheme.colors.textBlack
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "Back",
-            color = Color.Black,
+            color = AppTheme.colors.textBlack,
             style = AppTheme.typography.large.copy(
                 fontWeight = FontWeight.Bold
             ),

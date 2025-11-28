@@ -53,6 +53,7 @@ fun RoundsHeader(startState: StartState) {
             style = AppTheme.typography.large.copy(
                 fontWeight = FontWeight.Bold
             ),
+            color = AppTheme.colors.textBlack
         )
 
         AnimatedContent(
@@ -83,6 +84,7 @@ fun RoundsHeader(startState: StartState) {
                 style = AppTheme.typography.large.copy(
                     fontWeight = FontWeight.Bold
                 ),
+                color = AppTheme.colors.textBlack,
                 modifier = Modifier.graphicsLayer {
                     cameraDistance = 8 * density
                     rotationY = if (isIncreasing) -10f else 10f

@@ -31,7 +31,7 @@ fun ExitButton(gameViewModel: GameViewModel, navigator: Navigator) {
             .width(80.dp),
         shape = RoundedCornerShape(topStartPercent = 100, topEndPercent = 100),
         contentPadding = PaddingValues(0.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+        colors = ButtonDefaults.buttonColors(containerColor = AppTheme.colors.textWhite)
     ) {
         Box(
             modifier = Modifier
@@ -40,7 +40,7 @@ fun ExitButton(gameViewModel: GameViewModel, navigator: Navigator) {
         ) {
             Text(
                 text = "EXIT",
-                color = Color.Black,
+                color = AppTheme.colors.textBlack,
                 modifier = Modifier.padding(bottom = 25.dp, end = 20.dp),
                 style = AppTheme.typography.large.copy(
                     fontWeight = FontWeight.Bold
