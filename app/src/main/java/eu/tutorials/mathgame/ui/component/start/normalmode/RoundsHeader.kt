@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.ui.theme.AppTheme
@@ -44,8 +46,8 @@ fun RoundsHeader(startState: StartState) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(horizontal = 32.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -53,7 +55,11 @@ fun RoundsHeader(startState: StartState) {
             style = AppTheme.typography.large.copy(
                 fontWeight = FontWeight.Bold
             ),
-            color = AppTheme.colors.textBlack
+            color = AppTheme.colors.textBlack,
+            maxLines = 1,
+            modifier = Modifier
+                .weight(1f)
+                .basicMarquee()
         )
 
         AnimatedContent(

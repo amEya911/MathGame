@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import eu.tutorials.mathgame.data.model.BotLevel
@@ -63,6 +64,8 @@ fun BotLevelCard(
                     style = AppTheme.typography.xxxLarge.copy(
                         fontWeight = FontWeight.ExtraBold
                     ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = color
                 )
             }

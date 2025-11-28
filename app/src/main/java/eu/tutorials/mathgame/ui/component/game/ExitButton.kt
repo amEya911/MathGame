@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.navigation.Navigator
@@ -43,6 +44,8 @@ fun ExitButton(gameViewModel: GameViewModel, navigator: Navigator) {
                 style = AppTheme.typography.large.copy(
                     fontWeight = FontWeight.Bold
                 ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }

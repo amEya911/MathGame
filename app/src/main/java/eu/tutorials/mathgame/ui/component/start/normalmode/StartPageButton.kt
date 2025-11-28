@@ -4,6 +4,9 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,9 +21,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.ui.theme.AppTheme
@@ -43,33 +45,34 @@ fun StartPageButton(
     onClick: () -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
-    var pressed by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
 
     val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.95f else 1f,
+        targetValue = if (isPressed) 0.9f else 1f,
         animationSpec = spring(),
         label = "scale"
     )
 
     val animatedColor by animateColorAsState(
-        targetValue = if (pressed) color.copy(alpha = 0.85f) else color,
+        targetValue = if (isPressed) color.copy(alpha = 0.85f) else color,
         animationSpec = spring(),
         label = "color"
     )
 
     Button(
         onClick = {
-            pressed = true
             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             onClick()
-            pressed = false
         },
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 32.dp)
             .scale(scale),
         shape = RoundedCornerShape(32.dp),
         colors = ButtonDefaults.buttonColors(containerColor = animatedColor),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp)
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
+        interactionSource = interactionSource
     ) {
         Row(
             modifier = Modifier
@@ -89,21 +92,28 @@ fun StartPageButton(
                 Text(
                     text = "PLAY VS",
                     color = AppTheme.colors.textWhite.copy(alpha = 0.9f),
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = text,
                     color = AppTheme.colors.textWhite,
                     style = AppTheme.typography.xxLarge.copy(
                         fontWeight = FontWeight.Bold
-                    )
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = subText,
                     color = AppTheme.colors.textWhite.copy(alpha = 0.8f),
                     style = AppTheme.typography.xSmall.copy(
                         fontWeight = FontWeight.ExtraBold
-                    )
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .basicMarquee()
                 )
             }
         }

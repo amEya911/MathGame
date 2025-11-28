@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.ui.theme.AppTheme
 
@@ -36,6 +37,8 @@ fun PlayButton(color: Color, onClick: () -> Unit) {
             style = AppTheme.typography.large.copy(
                 fontWeight = FontWeight.Bold
             ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             color = AppTheme.colors.textWhite
         )
     }
