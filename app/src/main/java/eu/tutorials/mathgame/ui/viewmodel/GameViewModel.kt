@@ -69,10 +69,12 @@ class GameViewModel @Inject constructor(
 
                         if (isBlueSection) {
                             if (isCorrect) newBlueScore++ else newRedScore++
-                            _gameState.value = _gameState.value.copy(selectedBlueOption = selectedOption)
+                            _gameState.value =
+                                _gameState.value.copy(selectedBlueOption = selectedOption)
                         } else {
                             if (isCorrect) newRedScore++ else newBlueScore++
-                            _gameState.value = _gameState.value.copy(selectedRedOption = selectedOption)
+                            _gameState.value =
+                                _gameState.value.copy(selectedRedOption = selectedOption)
                         }
 
                         _gameState.value = _gameState.value.copy(
@@ -97,6 +99,7 @@ class GameViewModel @Inject constructor(
 
             is GameEvent.OnExitClicked -> {
                 event.navigator.popBack()
+                onEvent(GameEvent.OnReset)
                 analyticsLogger.log(LogEvents.EXIT_GAME)
             }
 
