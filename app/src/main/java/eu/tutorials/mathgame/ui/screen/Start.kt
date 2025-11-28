@@ -3,15 +3,14 @@ package eu.tutorials.mathgame.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import eu.tutorials.mathgame.data.model.GameMode
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
-import eu.tutorials.mathgame.ui.component.start.BotModeSelection
-import eu.tutorials.mathgame.ui.component.start.NormalModeSelection
+import eu.tutorials.mathgame.ui.component.start.botmode.BotModeSelection
+import eu.tutorials.mathgame.ui.component.start.normalmode.NormalModeSelection
 import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 

@@ -97,7 +97,7 @@ fun Game(
                     .offset(x = 40.dp)
                     .rotate(-90f)
             ) {
-                ExitButton(gameViewModel)
+                ExitButton(gameViewModel, navigator)
             }
         }
 

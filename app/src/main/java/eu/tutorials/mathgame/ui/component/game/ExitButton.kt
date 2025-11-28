@@ -18,13 +18,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.tutorials.mathgame.data.event.GameEvent
+import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 
 @Composable
-fun ExitButton(gameViewModel: GameViewModel) {
+fun ExitButton(gameViewModel: GameViewModel, navigator: Navigator) {
     Button(
-        onClick = { gameViewModel.onEvent(GameEvent.OnExitClicked) },
+        onClick = { gameViewModel.onEvent(GameEvent.OnExitClicked(navigator)) },
         modifier = Modifier
             .height(80.dp)
             .width(80.dp),

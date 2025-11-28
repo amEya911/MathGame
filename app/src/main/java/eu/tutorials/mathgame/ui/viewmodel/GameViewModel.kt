@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
+import eu.tutorials.mathgame.data.datasource.remote.AnalyticsLogger
+import eu.tutorials.mathgame.data.datasource.remote.LogEvents
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.Answer
 import eu.tutorials.mathgame.data.model.Operand
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    private val remoteConfig: FirebaseRemoteConfig
+    private val remoteConfig: FirebaseRemoteConfig,
+    private val analyticsLogger: AnalyticsLogger,
 ) : ViewModel() {
 
     val config get() = remoteConfig
@@ -33,6 +36,7 @@ class GameViewModel @Inject constructor(
     fun onEvent(event: GameEvent) {
         when (event) {
             is GameEvent.NavigateBackStack -> {
+                analyticsLogger.log(LogEvents.GAME_COMPLETED)
                 event.navigator.popBack()
                 onEvent(GameEvent.OnReset)
             }
@@ -50,7 +54,39 @@ class GameViewModel @Inject constructor(
             }
 
             is GameEvent.OnOptionButtonClicked -> {
-                handleOptionClick(event.selectedOption, event.isBlueSection)
+                val selectedOption = event.selectedOption
+                val isBlueSection = event.isBlueSection
+                viewModelScope.launch {
+                    if (!mutex.tryLock()) return@launch
+
+                    try {
+                        val correctAnswer =
+                            _gameState.value.options?.find { it.answer }?.option ?: return@launch
+                        val isCorrect = selectedOption == correctAnswer
+
+                        var newBlueScore = _gameState.value.blueScore
+                        var newRedScore = _gameState.value.redScore
+
+                        if (isBlueSection) {
+                            if (isCorrect) newBlueScore++ else newRedScore++
+                            _gameState.value = _gameState.value.copy(selectedBlueOption = selectedOption)
+                        } else {
+                            if (isCorrect) newRedScore++ else newBlueScore++
+                            _gameState.value = _gameState.value.copy(selectedRedOption = selectedOption)
+                        }
+
+                        _gameState.value = _gameState.value.copy(
+                            blueScore = newBlueScore,
+                            redScore = newRedScore
+                        )
+
+                        delay(3000)
+                        nextQuestion()
+
+                    } finally {
+                        mutex.unlock()
+                    }
+                }
             }
 
             is GameEvent.SetMaxWinningPoints -> {
@@ -59,10 +95,9 @@ class GameViewModel @Inject constructor(
                 )
             }
 
-            GameEvent.OnExitClicked -> {
-                _gameState.value = _gameState.value.copy(
-                    isExitClicked = true
-                )
+            is GameEvent.OnExitClicked -> {
+                event.navigator.popBack()
+                analyticsLogger.log(LogEvents.EXIT_GAME)
             }
 
             GameEvent.OnReset -> {
@@ -70,7 +105,16 @@ class GameViewModel @Inject constructor(
             }
 
             GameEvent.StartCountDownAndNextQuestion -> {
-                startCountdownAndNextQuestion()
+                viewModelScope.launch {
+                    _gameState.value = _gameState.value.copy(countdown = 3)
+                    delay(1000)
+                    _gameState.value = _gameState.value.copy(countdown = 2)
+                    delay(1000)
+                    _gameState.value = _gameState.value.copy(countdown = 1)
+                    delay(1000)
+                    _gameState.value = _gameState.value.copy(countdown = null)
+                    nextQuestion()
+                }
             }
 
             is GameEvent.InitializeGameModeAndBotLevel -> {
@@ -78,54 +122,6 @@ class GameViewModel @Inject constructor(
                     gameMode = event.gameMode,
                     botLevel = event.botLevel
                 )
-            }
-        }
-    }
-
-    private fun startCountdownAndNextQuestion() {
-        viewModelScope.launch {
-            _gameState.value = _gameState.value.copy(countdown = 3)
-            delay(1000)
-            _gameState.value = _gameState.value.copy(countdown = 2)
-            delay(1000)
-            _gameState.value = _gameState.value.copy(countdown = 1)
-            delay(1000)
-            _gameState.value = _gameState.value.copy(countdown = null)
-            nextQuestion()
-        }
-    }
-
-
-    private fun handleOptionClick(selectedOption: Int, isBlueSection: Boolean) {
-        viewModelScope.launch {
-            if (!mutex.tryLock()) return@launch
-
-            try {
-                val correctAnswer =
-                    _gameState.value.options?.find { it.answer }?.option ?: return@launch
-                val isCorrect = selectedOption == correctAnswer
-
-                var newBlueScore = _gameState.value.blueScore
-                var newRedScore = _gameState.value.redScore
-
-                if (isBlueSection) {
-                    if (isCorrect) newBlueScore++ else newRedScore++
-                    _gameState.value = _gameState.value.copy(selectedBlueOption = selectedOption)
-                } else {
-                    if (isCorrect) newRedScore++ else newBlueScore++
-                    _gameState.value = _gameState.value.copy(selectedRedOption = selectedOption)
-                }
-
-                _gameState.value = _gameState.value.copy(
-                    blueScore = newBlueScore,
-                    redScore = newRedScore
-                )
-
-                delay(3000)
-                nextQuestion()
-
-            } finally {
-                mutex.unlock()
             }
         }
     }

@@ -1,4 +1,4 @@
-package eu.tutorials.mathgame.ui.component.start
+package eu.tutorials.mathgame.ui.component.start.botmode
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -46,7 +46,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.event.StartEvent

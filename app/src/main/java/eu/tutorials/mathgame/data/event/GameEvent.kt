@@ -15,6 +15,6 @@ sealed interface GameEvent {
     data object StartCountDownAndNextQuestion: GameEvent
     data class SetMaxWinningPoints(val maxWinningPoints: Long): GameEvent
     data class OnOptionButtonClicked(val selectedOption: Int, val isBlueSection: Boolean): GameEvent
-    data object OnExitClicked: GameEvent
+    data class OnExitClicked(val navigator: Navigator): GameEvent
     data object OnReset: GameEvent
 }

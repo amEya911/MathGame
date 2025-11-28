@@ -1,4 +1,4 @@
-package eu.tutorials.mathgame.ui.component.start
+package eu.tutorials.mathgame.ui.component.start.normalmode
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -13,26 +13,22 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.with
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,11 +39,9 @@ import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
+import eu.tutorials.mathgame.ui.component.start.botmode.BotLevelSlider
 import eu.tutorials.mathgame.ui.theme.AppTheme
-import eu.tutorials.mathgame.ui.theme.botModeBackground
-import eu.tutorials.mathgame.ui.theme.primaryColor
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
-import eu.tutorials.mathgame.util.FirebaseUtils
 
 @Composable
 fun NormalModeSelection(
@@ -55,7 +49,6 @@ fun NormalModeSelection(
     startViewModel: StartViewModel,
     startState: StartState
 ) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -161,144 +154,8 @@ fun NormalModeSelection(
 }
 
 
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun RoundsHeader(startState: StartState) {
-    val rounds = startState.levelSliderPosition.toInt().inc()
-
-    // Track previous value to know direction (increase/decrease)
-    var previousRounds by remember { mutableStateOf(rounds) }
-    val isIncreasing = rounds > previousRounds
-
-    LaunchedEffect(rounds) {
-        previousRounds = rounds
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Select number of rounds",
-            style = AppTheme.typography.large.copy(
-                fontWeight = FontWeight.Bold
-            ),
-        )
-
-        AnimatedContent(
-            targetState = rounds,
-            transitionSpec = {
-                if (isIncreasing) {
-                    // Number increased → old goes left, new comes from right
-                    (slideInHorizontally(
-                        animationSpec = tween(250)
-                    ) { fullWidth -> fullWidth } + fadeIn()) togetherWith
-                            (slideOutHorizontally(
-                                animationSpec = tween(250)
-                            ) { fullWidth -> -fullWidth } + fadeOut())
-                } else {
-                    // Number decreased → old goes right, new comes from left
-                    (slideInHorizontally(
-                        animationSpec = tween(250)
-                    ) { fullWidth -> -fullWidth } + fadeIn()) togetherWith
-                            (slideOutHorizontally(
-                                animationSpec = tween(250)
-                            ) { fullWidth -> fullWidth } + fadeOut())
-                }.using(SizeTransform(clip = false))
-            },
-            label = "rounds_animation"
-        ) { value ->
-            Text(
-                text = value.toString(),
-                style = AppTheme.typography.large.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.graphicsLayer {
-                    cameraDistance = 8 * density
-                    rotationY = if (isIncreasing) -10f else 10f
-                }
-            )
-        }
-    }
-}
 
 
 
-@Composable
-fun StartPageButton(
-    icon: Painter,
-    text: String,
-    subText: String,
-    color: Color,
-    onClick: () -> Unit
-) {
-    val haptic = LocalHapticFeedback.current
-    var pressed by remember { mutableStateOf(false) }
 
-    val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.95f else 1f,
-        animationSpec = spring(),
-        label = "scale"
-    )
 
-    val animatedColor by animateColorAsState(
-        targetValue = if (pressed) color.copy(alpha = 0.85f) else color,
-        animationSpec = spring(),
-        label = "color"
-    )
-
-    Button(
-        onClick = {
-            pressed = true
-            haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-            onClick()
-            pressed = false
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .scale(scale),
-        shape = RoundedCornerShape(32.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = animatedColor),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Image(
-                painter = icon,
-                contentDescription = null,
-                modifier = Modifier.size(70.dp),
-                colorFilter = ColorFilter.tint(Color.White)
-            )
-            Spacer(modifier = Modifier.width(24.dp))
-            Column {
-                Text(
-                    text = "PLAY VS",
-                    color = Color.White.copy(alpha = 0.9f),
-                    fontSize = 16.sp
-                )
-                Text(
-                    text = text,
-                    color = Color.White,
-                    style = AppTheme.typography.xxLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-                Text(
-                    text = subText,
-                    color = Color.White.copy(alpha = 0.8f),
-                    style = AppTheme.typography.xSmall.copy(
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                )
-            }
-        }
-    }
-}

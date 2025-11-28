@@ -21,6 +21,5 @@ data class GameState(
     val redScore: Int = 0,
     val selectedBlueOption: Int? = null,
     val selectedRedOption: Int? = null,
-    val isExitClicked: Boolean = false,
     val countdown: Int? = null
 )

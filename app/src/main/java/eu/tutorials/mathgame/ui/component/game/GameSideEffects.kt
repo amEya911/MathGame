@@ -49,12 +49,6 @@ fun GameSideEffects(
         }
     }
 
-    LaunchedEffect(gameState.isExitClicked) {
-        if (gameState.isExitClicked) {
-            gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
-        }
-    }
-
     LaunchedEffect(countdown) {
         val soundRes = when (countdown) {
             1, 2, 3 -> R.raw.beep
