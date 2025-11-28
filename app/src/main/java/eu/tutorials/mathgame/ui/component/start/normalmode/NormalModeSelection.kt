@@ -19,7 +19,7 @@ import eu.tutorials.mathgame.R
 import eu.tutorials.mathgame.data.event.StartEvent
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.navigation.Navigator
-import eu.tutorials.mathgame.ui.component.start.botmode.Slider
+import eu.tutorials.mathgame.ui.component.common.Slider
 import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 

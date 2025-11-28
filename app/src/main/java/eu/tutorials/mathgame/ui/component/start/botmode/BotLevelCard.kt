@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import eu.tutorials.mathgame.data.model.BotLevel
+import eu.tutorials.mathgame.ui.component.common.Slider
 import eu.tutorials.mathgame.ui.theme.AppTheme
 
 @Composable
