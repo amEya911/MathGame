@@ -5,7 +5,9 @@ import androidx.compose.ui.graphics.Color
 data class AppColors(
     val textBlack: Color,
     val textWhite: Color,
+    val backGroundWhite: Color,
     val normalModeImageColor: Color,
+    val sliderColor: Color,
     val normalModeBackground: Color,
     val normalModeSurface: Color,
     val normalModeButton: Color,

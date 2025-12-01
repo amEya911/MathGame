@@ -17,7 +17,11 @@ import androidx.compose.ui.unit.sp
 val DarkAppColors = AppColors(
     textBlack = Color(0xFF000000),
     textWhite = Color(0xFFFFFFFF),
+    backGroundWhite = Color(0xFFFFFFFF),
+
     normalModeImageColor = Color(0xFFFFFFFF),
+
+    sliderColor = Color(0xFFCCCCCC),
 
     normalModeBackground = Color(0xFFE0D7FF),
     normalModeSurface = Color(0xFFF7FEF7),

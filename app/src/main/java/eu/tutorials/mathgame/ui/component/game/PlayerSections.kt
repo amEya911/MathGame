@@ -55,7 +55,7 @@ fun PlayerSections(
             options = gameState.options ?: emptyList(),
             rotation = 0f,
             color = Color(0xFFFECCD1),
-            borderColor = Color.Red,
+            borderColor = AppTheme.colors.primaryColor,
             selectedOption = gameState.selectedRedOption,
             enabled = (gameState.selectedBlueOption == null) && (gameState.selectedRedOption == null),
             onOptionClick = {

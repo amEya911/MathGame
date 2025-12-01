@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import eu.tutorials.mathgame.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,8 +59,8 @@ fun Slider(
             .height(sliderHeight),
         colors = SliderDefaults.colors(
             thumbColor = color,
-            activeTrackColor = Color.LightGray,
-            inactiveTrackColor = Color.Gray,
+            activeTrackColor = AppTheme.colors.sliderColor,
+            inactiveTrackColor = AppTheme.colors.sliderColor,
             disabledThumbColor = color,
             activeTickColor = Color.Transparent,
             inactiveTickColor = Color.Transparent
@@ -74,7 +75,7 @@ fun Slider(
                         scaleY = scaleAnim
                     }
                     .background(color, CircleShape)
-                    .border(12.dp, Color.White, CircleShape)
+                    .border(12.dp, AppTheme.colors.backGroundWhite, CircleShape)
             )
         },
 
@@ -83,8 +84,8 @@ fun Slider(
                 Modifier
                     .fillMaxWidth()
                     .height(trackHeight)
-                    .background(Color.LightGray, RoundedCornerShape(50))
-                    .border(8.dp, Color.White, RoundedCornerShape(50))
+                    .background(AppTheme.colors.sliderColor, RoundedCornerShape(50))
+                    .border(8.dp, AppTheme.colors.backGroundWhite, RoundedCornerShape(50))
             )
         }
     )

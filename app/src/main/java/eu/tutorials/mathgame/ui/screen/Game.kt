@@ -12,14 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -77,7 +73,7 @@ fun Game(
                     .size(100.dp)
                     .offset(x = (-50).dp)
                     .clip(RoundedCornerShape(topEndPercent = 100, bottomEndPercent = 100))
-                    .background(Color.White)
+                    .background(AppTheme.colors.backGroundWhite)
             ) {
                 ScoreIndicator(gameState)
             }
