@@ -33,8 +33,10 @@ fun Options(
     onOptionPositioned: ((Rect) -> Unit)? = null
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         options.forEach { option ->
             val isCorrect = option.answer
@@ -63,19 +65,19 @@ fun Options(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(vertical = 4.dp)
                         .border(4.dp, borderColor, RoundedCornerShape(100))
-                        .height(70.dp),
+                        .height(64.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = backgroundColor,
                         disabledContainerColor = backgroundColor
                     ),
-                    enabled = enabled
+                    enabled = enabled,
                 ) {
                     Text(
                         text = option.option.toString(),
                         color = borderColor,
-                        style = AppTheme.typography.xLarge,
+                        style = AppTheme.typography.large,
                         maxLines = 1
                     )
                 }

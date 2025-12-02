@@ -41,8 +41,10 @@ val DarkAppColors = AppColors(
     mediumColor = Color(0xFFFFEB3B),
     hardColor = Color(0xFFFF0000),
 
-    primaryColor = Color(0xFFFF0000),
-    primaryInverseColor = Color(0xFF0000FF),
+    playerOnePrimary = Color(0xFFFF0000),
+    playerOneSecondary = Color(0xFFFECCD1),
+    playerTwoPrimary = Color(0xFF0000FF),
+    playerTwoSecondary = Color(0xFFD8E0FE),
 
     correctAnswerColor = Color(0xFF00C853),
     wrongAnswerColor = Color(0xFF444444),

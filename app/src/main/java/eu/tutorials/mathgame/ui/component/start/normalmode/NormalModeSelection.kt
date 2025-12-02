@@ -114,7 +114,7 @@ fun NormalModeSelection(
                 trackHeight = 30.dp,
                 padding = 12.dp,
                 endValue = 19f,
-                color = AppTheme.colors.primaryColor
+                color = AppTheme.colors.playerOnePrimary
             )
 
             Spacer(modifier = Modifier.height(24.dp))

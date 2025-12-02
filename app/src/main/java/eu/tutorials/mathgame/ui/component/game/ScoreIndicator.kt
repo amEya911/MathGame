@@ -30,7 +30,7 @@ fun ScoreIndicator(
     ) {
         Text(
             text = gameState.redScore.toString(),
-            color = AppTheme.colors.primaryColor,
+            color = AppTheme.colors.playerOnePrimary,
             style = AppTheme.typography.medium.copy(
                 fontWeight = FontWeight.SemiBold
             )
@@ -38,7 +38,7 @@ fun ScoreIndicator(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = gameState.blueScore.toString(),
-            color = AppTheme.colors.primaryInverseColor,
+            color = AppTheme.colors.playerTwoPrimary,
             style = AppTheme.typography.medium.copy(
                 fontWeight = FontWeight.SemiBold
             )

@@ -20,8 +20,8 @@ fun WinnerOverlay(
     if (winner == null || !gameState.showWinnerBox) return
 
     val backgroundColor = when (winner) {
-        Winner.BLUE -> AppTheme.colors.primaryInverseColor
-        Winner.RED -> AppTheme.colors.primaryColor
+        Winner.BLUE -> AppTheme.colors.playerTwoPrimary
+        Winner.RED -> AppTheme.colors.playerOnePrimary
     }
 
     Box(

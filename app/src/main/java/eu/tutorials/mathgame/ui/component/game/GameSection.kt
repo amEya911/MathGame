@@ -33,14 +33,30 @@ fun GameSection(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.rotate(rotation)
     ) {
-        Question(operands, operation)
+        Question(
+            operands = operands,
+            operation = operation
+        )
+
         Spacer(modifier = Modifier.height(32.dp))
+
         HorizontalDivider(
             modifier = Modifier.clip(RoundedCornerShape(100)),
             thickness = 10.dp,
             color = borderColor
         )
+
         Spacer(modifier = Modifier.height(32.dp))
-        Options(options, color, borderColor, selectedOption, enabled, onOptionClick, onOptionPositioned)
+
+        Options(
+            options = options,
+            color = color,
+            borderColor = borderColor,
+            selectedOption = selectedOption,
+            enabled = enabled,
+            onOptionClick = onOptionClick,
+            onOptionPositioned = onOptionPositioned
+        )
     }
 }
+
