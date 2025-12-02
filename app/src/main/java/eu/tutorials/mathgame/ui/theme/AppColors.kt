@@ -21,5 +21,15 @@ data class AppColors(
     val correctAnswerColor: Color,
     val wrongAnswerColor: Color,
     val botModeBackground: Color,
-    val botModeBox: Color
+    val botModeBox: Color,
+
+    val confettiColors: ConfettiColors
+)
+
+data class ConfettiColors(
+    val purple: Color,
+    val blue: Color,
+    val green: Color,
+    val yellow: Color,
+    val red: Color
 )

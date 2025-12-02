@@ -10,15 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.state.GameState
@@ -29,9 +26,11 @@ import eu.tutorials.mathgame.ui.component.game.ExitButton
 import eu.tutorials.mathgame.ui.component.game.GameSideEffects
 import eu.tutorials.mathgame.ui.component.game.PlayerSections
 import eu.tutorials.mathgame.ui.component.game.ScoreIndicator
+import eu.tutorials.mathgame.ui.component.game.WinnerOverlay
+import eu.tutorials.mathgame.ui.component.game.WinnerSideEffects
 import eu.tutorials.mathgame.ui.theme.AppTheme
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
-import kotlinx.coroutines.delay
+import eu.tutorials.mathgame.util.WinnerUtils
 
 @Composable
 fun Game(
@@ -105,65 +104,9 @@ fun Game(
         }
     }
 
-    val winner = getWinner(maxWinningPoints, gameState)
+    val winner = WinnerUtils.getWinner(maxWinningPoints, gameState)
 
     WinnerSideEffects(winner, gameViewModel, navigator)
 
     WinnerOverlay(winner, gameState)
-}
-
-fun getWinner(maxWinningPoints: Long?, gameState: GameState): Winner? {
-    if (maxWinningPoints == null || maxWinningPoints == 0L) return null
-
-    val target = maxWinningPoints.toInt()
-
-    return when {
-        gameState.blueScore == target -> Winner.BLUE
-        gameState.redScore == target -> Winner.RED
-        else -> null
-    }
-}
-
-enum class Winner { BLUE, RED }
-
-@Composable
-fun WinnerSideEffects(
-    winner: Winner?,
-    gameViewModel: GameViewModel,
-    navigator: Navigator
-) {
-    if (winner == null) return
-
-    LaunchedEffect(winner) {
-        delay(3000)
-        gameViewModel.onEvent(GameEvent.ShowWinnerBox)
-        delay(2000)
-        gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
-    }
-}
-
-@Composable
-fun WinnerOverlay(
-    winner: Winner?,
-    gameState: GameState
-) {
-    if (winner == null || !gameState.showWinnerBox) return
-
-    val backgroundColor = when (winner) {
-        Winner.BLUE -> AppTheme.colors.primaryInverseColor
-        Winner.RED -> AppTheme.colors.primaryColor
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = if (winner == Winner.BLUE) "Blue Wins!" else "Red Wins!",
-            style = AppTheme.typography.xLarge.copy(fontWeight = FontWeight.Bold),
-            color = AppTheme.colors.textWhite
-        )
-    }
 }

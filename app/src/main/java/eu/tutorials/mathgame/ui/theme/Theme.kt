@@ -14,6 +14,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
 
+val confettiColors = ConfettiColors(
+    purple = Color(0xFFa864fd),
+    blue = Color(0xFF29cdff),
+    green = Color(0xFF78ff44),
+    red = Color(0xFFff718d),
+    yellow = Color(0xFFfdff6a)
+)
+
 val DarkAppColors = AppColors(
     textBlack = Color(0xFF000000),
     textWhite = Color(0xFFFFFFFF),
@@ -40,7 +48,8 @@ val DarkAppColors = AppColors(
     wrongAnswerColor = Color(0xFF444444),
 
     botModeBackground = Color(0xFF888888),
-    botModeBox = Color(0xFF444444)
+    botModeBox = Color(0xFF444444),
+    confettiColors = confettiColors
 )
 
 val LightAppColors = DarkAppColors
