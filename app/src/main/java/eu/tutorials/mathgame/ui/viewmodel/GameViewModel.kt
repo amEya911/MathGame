@@ -12,6 +12,7 @@ import eu.tutorials.mathgame.data.model.Operand
 import eu.tutorials.mathgame.data.model.Option
 import eu.tutorials.mathgame.data.state.GameState
 import eu.tutorials.mathgame.navigation.popBack
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,10 +33,14 @@ class GameViewModel @Inject constructor(
     val gameState: StateFlow<GameState> = _gameState
 
     private val mutex = Mutex()
+    private var countdownJob: Job? = null
+    private var nextQuestionJob: Job? = null
 
     fun onEvent(event: GameEvent) {
         when (event) {
             is GameEvent.NavigateBackStack -> {
+                countdownJob?.cancel()
+                nextQuestionJob?.cancel()
                 analyticsLogger.log(LogEvents.GAME_COMPLETED)
                 event.navigator.popBack()
                 onEvent(GameEvent.OnReset)
@@ -49,10 +54,6 @@ class GameViewModel @Inject constructor(
                 _gameState.value = _gameState.value.copy(selectedButtonRect = event.newRect)
             }
 
-            GameEvent.OnNextQuestion -> {
-                nextQuestion()
-            }
-
             GameEvent.ShowWinnerBox -> {
                 _gameState.value = _gameState.value.copy(
                     showWinnerBox = true
@@ -62,7 +63,9 @@ class GameViewModel @Inject constructor(
             is GameEvent.OnOptionButtonClicked -> {
                 val selectedOption = event.selectedOption
                 val isBlueSection = event.isBlueSection
-                viewModelScope.launch {
+                nextQuestionJob?.cancel()
+
+                nextQuestionJob = viewModelScope.launch {
                     if (!mutex.tryLock()) return@launch
 
                     try {
@@ -89,7 +92,7 @@ class GameViewModel @Inject constructor(
                         )
 
                         delay(3000)
-                        nextQuestion()
+                        onEvent(GameEvent.OnNextQuestion)
 
                     } finally {
                         mutex.unlock()
@@ -104,17 +107,24 @@ class GameViewModel @Inject constructor(
             }
 
             is GameEvent.OnExitClicked -> {
-                event.navigator.popBack()
+                countdownJob?.cancel()
+                nextQuestionJob?.cancel()
                 onEvent(GameEvent.OnReset)
                 analyticsLogger.log(LogEvents.EXIT_GAME)
+                event.navigator.popBack()
             }
 
             GameEvent.OnReset -> {
+                countdownJob?.cancel()
+                nextQuestionJob?.cancel()
                 _gameState.value = GameState()
             }
 
             GameEvent.StartCountDownAndNextQuestion -> {
-                viewModelScope.launch {
+                countdownJob?.cancel()
+                nextQuestionJob?.cancel()
+
+                countdownJob = viewModelScope.launch {
                     _gameState.value = _gameState.value.copy(countdown = 3)
                     delay(1000)
                     _gameState.value = _gameState.value.copy(countdown = 2)
@@ -122,7 +132,7 @@ class GameViewModel @Inject constructor(
                     _gameState.value = _gameState.value.copy(countdown = 1)
                     delay(1000)
                     _gameState.value = _gameState.value.copy(countdown = null)
-                    nextQuestion()
+                    onEvent(GameEvent.OnNextQuestion)
                 }
             }
 
@@ -132,23 +142,22 @@ class GameViewModel @Inject constructor(
                     botLevel = event.botLevel
                 )
             }
+
+            GameEvent.OnNextQuestion -> {
+                val operands = generateOperands()
+                val operation = generateOperation()
+                val answer = calculateAnswer(operands, operation)
+                val options = calculateOptions(answer)
+
+                _gameState.value = _gameState.value.copy(
+                    operands = operands,
+                    operation = operation,
+                    options = options,
+                    selectedRedOption = null,
+                    selectedBlueOption = null
+                )
+            }
         }
-    }
-
-    private fun nextQuestion() {
-        val operands = generateOperands()
-        val operation = generateOperation()
-        val answer = calculateAnswer(operands, operation)
-        val options = calculateOptions(answer)
-
-        _gameState.value = _gameState.value.copy(
-            operands = operands,
-            operation = operation,
-            options = options,
-            selectedRedOption = null,
-            selectedBlueOption = null
-        )
-
     }
 
     private fun calculateOptions(answer: Answer): List<Option> {

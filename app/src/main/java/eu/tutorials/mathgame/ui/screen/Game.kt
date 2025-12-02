@@ -1,5 +1,7 @@
 package eu.tutorials.mathgame.ui.screen
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -17,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.state.GameState
@@ -51,6 +52,12 @@ fun Game(
         animationSpec = tween(durationMillis = 500),
         label = "circleAnimation"
     )
+
+    Log.d("Ameya", "Game Options: ${gameState.options}")
+
+    BackHandler {
+        gameViewModel.onEvent(GameEvent.OnExitClicked(navigator))
+    }
 
     GameSideEffects(
         gameViewModel = gameViewModel,
@@ -98,39 +105,65 @@ fun Game(
         }
     }
 
-    if (maxWinningPoints != null && maxWinningPoints != 0L) {
-        if (gameState.blueScore == maxWinningPoints.toInt() || gameState.redScore == maxWinningPoints.toInt()) {
-            val showWinnerBox = gameState.showWinnerBox
-            LaunchedEffect(Unit) {
-                delay(3000)
-                gameViewModel.onEvent(GameEvent.ShowWinnerBox)
-                delay(2000)
-                gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
-            }
+    val winner = getWinner(maxWinningPoints, gameState)
 
-            if (showWinnerBox) {
-                val backgroundColor = if (gameState.blueScore == maxWinningPoints.toInt())
-                    AppTheme.colors.primaryInverseColor
-                else
-                    AppTheme.colors.primaryColor
+    WinnerSideEffects(winner, gameViewModel, navigator)
 
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(backgroundColor),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = if (gameState.blueScore == maxWinningPoints.toInt()) "Blue Wins!" else "Red Wins!",
-                        style = AppTheme.typography.xLarge.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = AppTheme.colors.textWhite,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-        }
+    WinnerOverlay(winner, gameState)
+}
+
+fun getWinner(maxWinningPoints: Long?, gameState: GameState): Winner? {
+    if (maxWinningPoints == null || maxWinningPoints == 0L) return null
+
+    val target = maxWinningPoints.toInt()
+
+    return when {
+        gameState.blueScore == target -> Winner.BLUE
+        gameState.redScore == target -> Winner.RED
+        else -> null
+    }
+}
+
+enum class Winner { BLUE, RED }
+
+@Composable
+fun WinnerSideEffects(
+    winner: Winner?,
+    gameViewModel: GameViewModel,
+    navigator: Navigator
+) {
+    if (winner == null) return
+
+    LaunchedEffect(winner) {
+        delay(3000)
+        gameViewModel.onEvent(GameEvent.ShowWinnerBox)
+        delay(2000)
+        gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
+    }
+}
+
+@Composable
+fun WinnerOverlay(
+    winner: Winner?,
+    gameState: GameState
+) {
+    if (winner == null || !gameState.showWinnerBox) return
+
+    val backgroundColor = when (winner) {
+        Winner.BLUE -> AppTheme.colors.primaryInverseColor
+        Winner.RED -> AppTheme.colors.primaryColor
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = if (winner == Winner.BLUE) "Blue Wins!" else "Red Wins!",
+            style = AppTheme.typography.xLarge.copy(fontWeight = FontWeight.Bold),
+            color = AppTheme.colors.textWhite
+        )
     }
 }
