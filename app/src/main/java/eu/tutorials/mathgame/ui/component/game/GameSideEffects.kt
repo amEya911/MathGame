@@ -41,14 +41,18 @@ fun GameSideEffects(
         }
     }
 
-    LaunchedEffect(countdown) {
+    LaunchedEffect(countdown, isAppInForeground) {
+        if (!isAppInForeground) return@LaunchedEffect
+
         val soundRes = when (countdown) {
             1, 2, 3 -> R.raw.beep
             null -> R.raw.start
             else -> null
         }
+
         soundRes?.let { Sound.playSound(context, it) }
     }
+
 
     if (gameState.gameMode == GameMode.BOT && isAppInForeground && !someoneWon) {
         LaunchedEffect(
