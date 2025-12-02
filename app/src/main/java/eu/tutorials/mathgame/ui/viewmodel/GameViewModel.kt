@@ -17,7 +17,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 import java.util.Random
 import javax.inject.Inject
 
@@ -32,15 +31,13 @@ class GameViewModel @Inject constructor(
     private val _gameState = MutableStateFlow(GameState())
     val gameState: StateFlow<GameState> = _gameState
 
-    private val mutex = Mutex()
     private var countdownJob: Job? = null
     private var nextQuestionJob: Job? = null
 
     fun onEvent(event: GameEvent) {
         when (event) {
             is GameEvent.NavigateBackStack -> {
-                countdownJob?.cancel()
-                nextQuestionJob?.cancel()
+                cancelJobs()
                 analyticsLogger.log(LogEvents.GAME_COMPLETED)
                 event.navigator.popBack()
                 onEvent(GameEvent.OnReset)
@@ -61,42 +58,37 @@ class GameViewModel @Inject constructor(
             }
 
             is GameEvent.OnOptionButtonClicked -> {
+                if (hasAnswered(_gameState.value)) return
+
                 val selectedOption = event.selectedOption
                 val isBlueSection = event.isBlueSection
                 nextQuestionJob?.cancel()
 
                 nextQuestionJob = viewModelScope.launch {
-                    if (!mutex.tryLock()) return@launch
+                    val correctAnswer =
+                        _gameState.value.options?.find { it.answer }?.option ?: return@launch
+                    val isCorrect = selectedOption == correctAnswer
 
-                    try {
-                        val correctAnswer =
-                            _gameState.value.options?.find { it.answer }?.option ?: return@launch
-                        val isCorrect = selectedOption == correctAnswer
+                    var newBlueScore = _gameState.value.blueScore
+                    var newRedScore = _gameState.value.redScore
 
-                        var newBlueScore = _gameState.value.blueScore
-                        var newRedScore = _gameState.value.redScore
-
-                        if (isBlueSection) {
-                            if (isCorrect) newBlueScore++ else newRedScore++
-                            _gameState.value =
-                                _gameState.value.copy(selectedBlueOption = selectedOption)
-                        } else {
-                            if (isCorrect) newRedScore++ else newBlueScore++
-                            _gameState.value =
-                                _gameState.value.copy(selectedRedOption = selectedOption)
-                        }
-
-                        _gameState.value = _gameState.value.copy(
-                            blueScore = newBlueScore,
-                            redScore = newRedScore
-                        )
-
-                        delay(3000)
-                        onEvent(GameEvent.OnNextQuestion)
-
-                    } finally {
-                        mutex.unlock()
+                    if (isBlueSection) {
+                        if (isCorrect) newBlueScore++ else newRedScore++
+                        _gameState.value =
+                            _gameState.value.copy(selectedBlueOption = selectedOption)
+                    } else {
+                        if (isCorrect) newRedScore++ else newBlueScore++
+                        _gameState.value =
+                            _gameState.value.copy(selectedRedOption = selectedOption)
                     }
+
+                    _gameState.value = _gameState.value.copy(
+                        blueScore = newBlueScore,
+                        redScore = newRedScore
+                    )
+
+                    delay(3000)
+                    onEvent(GameEvent.OnNextQuestion)
                 }
             }
 
@@ -107,23 +99,19 @@ class GameViewModel @Inject constructor(
             }
 
             is GameEvent.OnExitClicked -> {
-                countdownJob?.cancel()
-                nextQuestionJob?.cancel()
+                cancelJobs()
                 onEvent(GameEvent.OnReset)
                 analyticsLogger.log(LogEvents.EXIT_GAME)
                 event.navigator.popBack()
             }
 
             GameEvent.OnReset -> {
-                countdownJob?.cancel()
-                nextQuestionJob?.cancel()
+                cancelJobs()
                 _gameState.value = GameState()
             }
 
             GameEvent.StartCountDownAndNextQuestion -> {
-                countdownJob?.cancel()
-                nextQuestionJob?.cancel()
-
+                cancelJobs()
                 countdownJob = viewModelScope.launch {
                     _gameState.value = _gameState.value.copy(countdown = 3)
                     delay(1000)
@@ -239,5 +227,13 @@ class GameViewModel @Inject constructor(
     private fun generateOperation(): Int {
         val random = Random()
         return random.nextInt(4) + 1
+    }
+
+    private fun hasAnswered(state: GameState) =
+        state.selectedBlueOption != null || state.selectedRedOption != null
+
+    private fun cancelJobs() {
+        countdownJob?.cancel()
+        nextQuestionJob?.cancel()
     }
 }
