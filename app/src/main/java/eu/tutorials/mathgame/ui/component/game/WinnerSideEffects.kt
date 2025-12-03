@@ -6,6 +6,7 @@ import eu.tutorials.mathgame.data.event.GameEvent
 import eu.tutorials.mathgame.data.model.Winner
 import eu.tutorials.mathgame.navigation.Navigator
 import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
+import eu.tutorials.mathgame.util.FirebaseUtils
 import kotlinx.coroutines.delay
 
 @Composable
@@ -16,10 +17,14 @@ fun WinnerSideEffects(
 ) {
     if (winner == null) return
 
+    val remoteConfig = gameViewModel.config
+    val winnerDisplayDuration = FirebaseUtils.getWinnerDisplayDuration(remoteConfig).time
+
+
     LaunchedEffect(winner) {
         delay(3000)
         gameViewModel.onEvent(GameEvent.ShowWinnerBox)
-        delay(7000)
+        delay(winnerDisplayDuration)
         gameViewModel.onEvent(GameEvent.NavigateBackStack(navigator))
     }
 }

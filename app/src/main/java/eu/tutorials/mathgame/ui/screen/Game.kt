@@ -1,6 +1,5 @@
 package eu.tutorials.mathgame.ui.screen
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -51,8 +50,6 @@ fun Game(
         animationSpec = tween(durationMillis = 500),
         label = "circleAnimation"
     )
-
-    Log.d("Ameya", "Game Options: ${gameState.options}")
 
     BackHandler {
         gameViewModel.onEvent(GameEvent.OnExitClicked(navigator))

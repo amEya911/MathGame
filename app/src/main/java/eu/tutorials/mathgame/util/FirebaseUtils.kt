@@ -30,4 +30,13 @@ object FirebaseUtils {
 
         return BotConfig(minDelay, maxDelay, accuracy)
     }
+
+    fun getWinnerDisplayDuration(remoteConfig: FirebaseRemoteConfig): WinnerDisplayDuration {
+        val duration = remoteConfig.getLong("winner_display_duration").coerceAtLeast(3500)
+        return WinnerDisplayDuration(duration)
+    }
 }
+
+data class WinnerDisplayDuration(
+    val time: Long
+)
