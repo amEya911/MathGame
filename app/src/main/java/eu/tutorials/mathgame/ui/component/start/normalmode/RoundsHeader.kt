@@ -9,7 +9,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.tutorials.mathgame.data.state.StartState
 import eu.tutorials.mathgame.ui.theme.AppTheme
@@ -37,7 +37,6 @@ fun RoundsHeader(startState: StartState) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // "First to" + "points wins" as static/marquee text
         Text(
             text = "First to",
             style = AppTheme.typography.large.copy(
@@ -45,8 +44,6 @@ fun RoundsHeader(startState: StartState) {
             ),
             color = AppTheme.colors.textBlack,
             maxLines = 1,
-            modifier = Modifier
-                .basicMarquee()
         )
 
         AnimatedContent(
@@ -84,12 +81,13 @@ fun RoundsHeader(startState: StartState) {
         }
 
         Text(
-            text = "points wins",
+            text = if (rounds == 1) "point wins" else "points wins",
             style = AppTheme.typography.large.copy(
                 fontWeight = FontWeight.Bold
             ),
             color = AppTheme.colors.textBlack,
             maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
