@@ -5,7 +5,7 @@ import eu.tutorials.mathgame.data.model.GameMode
 
 data class StartState(
     val sliderPosition: Float = 0f,
-    val levelSliderPosition: Float = 0f,
+    val levelSliderPosition: Float = 4f,
     val previousLevelSliderPosition: Float = 0f,
     val previousLevel: BotLevel = BotLevel.EASY,
     val isRoundLevelIncreasing: Boolean = true,

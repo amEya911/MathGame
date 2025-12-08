@@ -23,7 +23,7 @@ class RoundsDataStoreManager @Inject constructor(
     }
 
     val levelSliderPositionFlow: Flow<Float> = context.dataStore.data.map { prefs ->
-        prefs[LEVEL_SLIDER_KEY] ?: 0f
+        prefs[LEVEL_SLIDER_KEY] ?: 4f
     }
 
     suspend fun saveLevelSliderPosition(position: Float) {
