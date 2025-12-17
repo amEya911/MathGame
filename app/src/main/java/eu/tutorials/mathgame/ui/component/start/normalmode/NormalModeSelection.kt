@@ -47,7 +47,6 @@ fun NormalModeSelection(
                     AppTheme.colors.botModeBackground,
                 )
             ))
-            //.padding(24.dp)
     ) {
         Column(
             modifier = Modifier
@@ -83,11 +82,11 @@ fun NormalModeSelection(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
                     Text(
                         text = buildString {
                             append("The first player to solve the task gets a point. ")
-                            append("For any wrong answer, the opponent gets a point.")
+                            append("For any wrong answer, the opponent gets a point. ")
+                            append("Adjust the slider to change the number of rounds.")
                         },
                         style = AppTheme.typography.medium.copy(
                             fontWeight = FontWeight.Medium

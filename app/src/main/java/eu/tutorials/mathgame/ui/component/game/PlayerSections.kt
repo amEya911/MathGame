@@ -47,10 +47,12 @@ fun PlayerSections(
             val enabled = if (spec.isBlue) {
                 gameState.gameMode == GameMode.NORMAL &&
                         gameState.selectedBlueOption == null &&
-                        gameState.selectedRedOption == null
+                        gameState.selectedRedOption == null &&
+                        !gameState.showWinnerBox
             } else {
                 gameState.selectedBlueOption == null &&
-                        gameState.selectedRedOption == null
+                        gameState.selectedRedOption == null &&
+                        !gameState.showWinnerBox
             }
 
             GameSection(

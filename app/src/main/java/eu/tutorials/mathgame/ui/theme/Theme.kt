@@ -15,11 +15,11 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
 
 val confettiColors = ConfettiColors(
-    purple = Color(0xFFa864fd),
-    blue = Color(0xFF29cdff),
-    green = Color(0xFF78ff44),
-    red = Color(0xFFff718d),
-    yellow = Color(0xFFfdff6a)
+    purple = Color(0xFF8B5CF6),
+    blue = Color(0xFF38BDF8),
+    green = Color(0xFF4ADE80),
+    red = Color(0xFFFB7185),
+    yellow = Color(0xFFFACC15)
 )
 
 val DarkAppColors = AppColors(
@@ -37,9 +37,9 @@ val DarkAppColors = AppColors(
     normalModeText = Color(0xFF330033),
     normalModeTopBackground = Color(0xFF9EA3F7),
 
-    easyColor = Color(0xFF4CAF50),
-    mediumColor = Color(0xFFFFEB3B),
-    hardColor = Color(0xFFFF0000),
+    easyColor = Color(0xFF22C55E),
+    mediumColor = Color(0xFFF59E0B),
+    hardColor = Color(0xFFEF4444),
 
     playerOnePrimary = Color(0xFFFF0000),
     playerOneSecondary = Color(0xFFFECCD1),
