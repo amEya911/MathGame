@@ -1,6 +1,5 @@
 package eu.tutorials.mathgame.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
@@ -56,7 +55,7 @@ val DarkAppColors = AppColors(
 
 val LightAppColors = DarkAppColors
 
-val LightAppTypography = AppTypography(
+val CustomAppTypography = AppTypography(
     xxxSmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -136,30 +135,23 @@ val LightAppTypography = AppTypography(
     ),
 )
 
-val DarkAppTypography = LightAppTypography
 
-val LocalAppTypography = compositionLocalOf { LightAppTypography }
+val LocalAppTypography = compositionLocalOf { CustomAppTypography }
 
 val LocalAppColors = compositionLocalOf { LightAppColors }
 
 @Composable
 fun MathGameTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit,
+    colors: AppColors = DarkAppColors,
+    content: @Composable () -> Unit
 ) {
-    val customColors = if (darkTheme) DarkAppColors else LightAppColors
-    val customTypography = if (darkTheme) DarkAppTypography else LightAppTypography
-
-    val baseDensity = LocalDensity.current
-    val fixedDensity = Density(
-        density = baseDensity.density,
-        fontScale = 1f
-    )
-
     CompositionLocalProvider(
-        LocalAppColors provides customColors,
-        LocalAppTypography provides customTypography,
-        LocalDensity provides fixedDensity,
+        LocalAppColors provides colors,
+        LocalAppTypography provides CustomAppTypography,
+        LocalDensity provides Density(
+            density = LocalDensity.current.density,
+            fontScale = 1f
+        )
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

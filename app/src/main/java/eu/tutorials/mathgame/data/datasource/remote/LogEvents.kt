@@ -1,7 +1,7 @@
 package eu.tutorials.mathgame.data.datasource.remote
 
 enum class LogEvents {
-    START_SCREEN_OPENED,
+    APP_OPENED,
     FRIEND_MODE_SELECTED,
     BOT_MODE_SELECTED,
     BOT_LEVEL_SELECTED,

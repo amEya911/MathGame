@@ -29,7 +29,6 @@ class StartViewModel @Inject constructor(
     val startState: StateFlow<StartState> = _startState
 
     init {
-        analyticsLogger.log(LogEvents.START_SCREEN_OPENED)
         viewModelScope.launch {
             val savedLevel = roundsDataStore.levelSliderPositionFlow.first()
             _startState.value = _startState.value.copy(levelSliderPosition = savedLevel)

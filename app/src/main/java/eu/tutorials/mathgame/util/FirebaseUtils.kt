@@ -3,6 +3,12 @@ package eu.tutorials.mathgame.util
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import eu.tutorials.mathgame.data.model.BotConfig
 import eu.tutorials.mathgame.data.model.BotLevel
+import eu.tutorials.mathgame.data.model.ThemeDto
+import eu.tutorials.mathgame.data.model.WinnerDisplayDuration
+import eu.tutorials.mathgame.ui.theme.AppColors
+import eu.tutorials.mathgame.ui.theme.DarkAppColors
+import eu.tutorials.mathgame.util.Colors.toAppColors
+import kotlinx.serialization.json.Json
 
 object FirebaseUtils {
     fun getBotConfig(remoteConfig: FirebaseRemoteConfig, botLevel: BotLevel?): BotConfig {
@@ -35,8 +41,22 @@ object FirebaseUtils {
         val duration = remoteConfig.getLong("winner_display_duration").coerceAtLeast(3500)
         return WinnerDisplayDuration(duration)
     }
-}
 
-data class WinnerDisplayDuration(
-    val time: Long
-)
+    private val jsonParser = Json {
+        ignoreUnknownKeys = true
+    }
+
+    fun getThemeFromRemoteConfig(
+        remoteConfig: FirebaseRemoteConfig
+    ): AppColors {
+
+        val json = remoteConfig.getString("app_theme")
+
+        return try {
+            val dto = jsonParser.decodeFromString<ThemeDto>(json)
+            dto.toAppColors(DarkAppColors)
+        } catch (_: Exception) {
+            DarkAppColors
+        }
+    }
+}

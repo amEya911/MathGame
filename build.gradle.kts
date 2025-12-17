@@ -5,4 +5,5 @@ plugins {
     alias(libs.plugins.dagger.hilt) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.compose.compiler) apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.10" apply false
 }

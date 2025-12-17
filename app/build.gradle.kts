@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     kotlin("kapt")
     alias(libs.plugins.google.gms.google.services)
-
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation (libs.androidx.datastore.preferences)
     implementation (libs.androidx.datastore.core)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
