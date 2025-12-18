@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     kotlin("kapt")
     alias(libs.plugins.google.gms.google.services)
-    id("org.jetbrains.kotlin.plugin.serialization")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -63,7 +63,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    // Allow references to generated code
     kapt {
         correctErrorTypes = true
     }
@@ -89,7 +88,7 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation (libs.androidx.datastore.preferences)
     implementation (libs.androidx.datastore.core)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
