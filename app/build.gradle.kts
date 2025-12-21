@@ -8,6 +8,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -17,6 +18,7 @@ android {
     defaultConfig {
         applicationId = "eu.tutorials.mathgame"
         minSdk = 28
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -38,7 +40,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -80,6 +83,7 @@ dependencies {
     implementation(libs.firebase.config)
     implementation(libs.firebase.analytics)
     implementation(libs.androidx.compose.animation)
+    implementation(libs.firebase.crashlytics)
     kapt (libs.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
