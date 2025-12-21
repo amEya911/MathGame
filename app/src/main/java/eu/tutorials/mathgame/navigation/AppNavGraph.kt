@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -20,7 +19,7 @@ import eu.tutorials.mathgame.ui.viewmodel.GameViewModel
 import eu.tutorials.mathgame.ui.viewmodel.StartViewModel
 
 @Composable
-fun AppNavGraph(modifier: Modifier = Modifier) {
+fun AppNavGraph() {
     val navController = rememberNavController()
 
     val startViewModel: StartViewModel = hiltViewModel()
